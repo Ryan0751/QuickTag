@@ -136,6 +136,11 @@
 				CLASSPREFIX = QTag;
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Ryan Ruel";
+				TargetAttributes = {
+					D1FAAE15185CA05F0063BF6B = {
+						DevelopmentTeam = LS527Z666R;
+					};
+				};
 			};
 			buildConfigurationList = D1FAAE11185CA05F0063BF6B /* Build configuration list for PBXProject "QuickTag" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -281,6 +286,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "QuickTag/QuickTag-Prefix.pch";
@@ -294,6 +300,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "QuickTag/QuickTag-Prefix.pch";
@@ -322,6 +329,7 @@
 				D1FAAE38185CA05F0063BF6B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
