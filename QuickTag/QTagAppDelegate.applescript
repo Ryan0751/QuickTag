@@ -62,10 +62,6 @@ script QTagAppDelegate
     property categoryList : {"Peak Time", "Lounge", "Chillout"}
     property attributeList : {"Dark", "Vocals", "Glitchy", "Tribal", "Upbeat"}
     
-    property genreArray : {}
-    property categoryArray : {}
-    property attributeArray : {}
-    
     property genreStartDelimiter : "("
     property genreEndDelimiter : ")"
     property categoryStartDelimiter : "{"
@@ -94,16 +90,14 @@ script QTagAppDelegate
             end try
         end if
         
-        set ud to current application's NSUserDefaults's standardUserDefaults()
-     --   ud's registerDefaults_({|genres|genreList})
-     --   ud's registerDefaults_({|categories|:"Lounge, Banger, Chillout"})
-      --  ud's registerDefaults_({|attributes|:"Light Vocal, Dark, Lounge, Upbeat"})
-
-     --   set my genreList to ud's valueForKey_("genres")
-        set savedGenreList to genreList
-        set savedCategoryList to categoryList
-        set savedAttributeList to attributeList
-    
+        set genreArray to genreArrayController's arrangedObjects()
+        
+        repeat with i from 1 to genrearray's |count|()
+            set oneItem to genrearray's objectAtIndex_(i-1)
+            log "Item: " & (oneItem as text)
+        end repeat
+   
+        
         -- Setup the interface
         setupInterface()
               
@@ -665,6 +659,20 @@ script QTagAppDelegate
             log "Revert cancelled"
         end if
     end revertChanges
+
+    --
+    -- Can we add a new category callback
+    --
+    on canAddCategory_(sender)
+        return 1
+    end canAddCategory
+
+    --
+    -- Can we add a new attribute callback
+    --
+    on canAddAttribute_(sender)
+        return 1
+    end canAddAttribute
 
     --
     -- Apply preferences button clicked, update the interface
