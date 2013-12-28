@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D129B5B1186C551100422DCA /* QuickTag_512x512@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D129B5B0186C551100422DCA /* QuickTag_512x512@2x.png */; };
+		D129B5B7186C5A7700422DCA /* QuickTag_128x128.png in Resources */ = {isa = PBXBuildFile; fileRef = D129B5B6186C5A7700422DCA /* QuickTag_128x128.png */; };
 		D1FAAE1A185CA05F0063BF6B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1FAAE19185CA05F0063BF6B /* Cocoa.framework */; };
 		D1FAAE1C185CA05F0063BF6B /* AppleScriptObjC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1FAAE1B185CA05F0063BF6B /* AppleScriptObjC.framework */; };
 		D1FAAE26185CA05F0063BF6B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D1FAAE24185CA05F0063BF6B /* InfoPlist.strings */; };
@@ -18,6 +20,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D129B5B0186C551100422DCA /* QuickTag_512x512@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "QuickTag_512x512@2x.png"; sourceTree = "<group>"; };
+		D129B5B6186C5A7700422DCA /* QuickTag_128x128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = QuickTag_128x128.png; sourceTree = "<group>"; };
+		D13AE2F4186863D500C23F2C /* QuickTag.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = QuickTag.entitlements; sourceTree = "<group>"; };
 		D1FAAE16185CA05F0063BF6B /* QuickTag.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuickTag.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1FAAE19185CA05F0063BF6B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		D1FAAE1B185CA05F0063BF6B /* AppleScriptObjC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppleScriptObjC.framework; path = System/Library/Frameworks/AppleScriptObjC.framework; sourceTree = SDKROOT; };
@@ -87,6 +92,7 @@
 		D1FAAE21185CA05F0063BF6B /* QuickTag */ = {
 			isa = PBXGroup;
 			children = (
+				D13AE2F4186863D500C23F2C /* QuickTag.entitlements */,
 				D1FAAE2D185CA05F0063BF6B /* QTagAppDelegate.applescript */,
 				D1FAAE2F185CA05F0063BF6B /* MainMenu.xib */,
 				D1FAAE32185CA05F0063BF6B /* Images.xcassets */,
@@ -98,6 +104,8 @@
 		D1FAAE22185CA05F0063BF6B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D129B5B6186C5A7700422DCA /* QuickTag_128x128.png */,
+				D129B5B0186C551100422DCA /* QuickTag_512x512@2x.png */,
 				D1FAAE23185CA05F0063BF6B /* QuickTag-Info.plist */,
 				D1FAAE24185CA05F0063BF6B /* InfoPlist.strings */,
 				D1FAAE27185CA05F0063BF6B /* main.m */,
@@ -139,6 +147,11 @@
 				TargetAttributes = {
 					D1FAAE15185CA05F0063BF6B = {
 						DevelopmentTeam = LS527Z666R;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -165,10 +178,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D129B5B1186C551100422DCA /* QuickTag_512x512@2x.png in Resources */,
 				D1FAAE26185CA05F0063BF6B /* InfoPlist.strings in Resources */,
 				D1FAAE33185CA05F0063BF6B /* Images.xcassets in Resources */,
 				D1FAAE2C185CA05F0063BF6B /* Credits.rtf in Resources */,
 				D1FAAE31185CA05F0063BF6B /* MainMenu.xib in Resources */,
+				D129B5B7186C5A7700422DCA /* QuickTag_128x128.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
