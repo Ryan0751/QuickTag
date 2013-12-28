@@ -238,7 +238,7 @@ script QTagAppDelegate
             -- Repopulate the comment preview, as this value is used in the final apply
             set nPc to ""
             
-            set nPc to nPc & ratingStartDelimiter & "rating " & selectedTrackRating & ratingEndDelimiter & ","
+            set nPc to nPc & ratingStartDelimiter & "Rating " & selectedTrackRating & ratingEndDelimiter & ","
             
             if (categoryOne's integerValue) then
                 set nPc to nPc & categoryStartDelimiter & (item 1 of categoryList) & categoryEndDelimiter & ","
