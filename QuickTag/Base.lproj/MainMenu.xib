@@ -700,7 +700,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" id="Pf9-Nr-tbl">
                             <font key="font" metaFont="system"/>
-                            <string key="title">To get started, play a track in iTunes.  Select a new genre, rating, category and some attributes, and click apply.  Open Preferences to set up your own tag values!</string>
+                            <string key="title">To get started, play a track in iTunes.  Select a new genre, rating, category and some attributes, and click apply to save.  Open the Preferences window to set up your own tag values!</string>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -751,14 +751,14 @@
         <window title="QuickTag for iTunes Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="uUb-Fr-kos">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="2843" y="305" width="421" height="550"/>
+            <rect key="contentRect" x="2843" y="305" width="421" height="583"/>
             <rect key="screenRect" x="2560" y="0.0" width="2560" height="1418"/>
             <view key="contentView" id="lpb-Tr-ThS">
-                <rect key="frame" x="0.0" y="0.0" width="421" height="550"/>
+                <rect key="frame" x="0.0" y="0.0" width="421" height="583"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NsP-F1-0FF">
-                        <rect key="frame" x="13" y="10" width="395" height="534"/>
+                        <rect key="frame" x="13" y="43" width="395" height="534"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
@@ -794,7 +794,7 @@
                                                                 </textFieldCell>
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                 <connections>
-                                                                    <binding destination="sn0-4H-uRT" name="value" keyPath="arrangedObjects.self" id="7LI-pv-Ind">
+                                                                    <binding destination="sn0-4H-uRT" name="value" keyPath="arrangedObjects.genre" id="O2U-Mc-66J">
                                                                         <dictionary key="options">
                                                                             <string key="NSNullPlaceholder">New Genre</string>
                                                                         </dictionary>
@@ -873,7 +873,7 @@
                                                                 </textFieldCell>
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                 <connections>
-                                                                    <binding destination="A0Z-Ix-twt" name="value" keyPath="arrangedObjects.self" id="P3c-mf-wBc">
+                                                                    <binding destination="A0Z-Ix-twt" name="value" keyPath="arrangedObjects.category" id="q4m-ET-VLO">
                                                                         <dictionary key="options">
                                                                             <string key="NSNullPlaceholder">New Category</string>
                                                                         </dictionary>
@@ -922,11 +922,11 @@
                             </tabViewItem>
                             <tabViewItem label="Attributes" identifier="" id="oGD-fU-uWg">
                                 <view key="view" id="6q0-L5-TqC">
-                                    <rect key="frame" x="10" y="33" width="375" height="488"/>
+                                    <rect key="frame" x="10" y="33" width="201" height="0.0"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dQo-1H-AGb">
-                                            <rect key="frame" x="17" y="46" width="341" height="439"/>
+                                            <rect key="frame" x="17" y="-442" width="341" height="439"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <clipView key="contentView" ambiguous="YES" misplaced="YES" id="xng-eU-Ot3">
                                                 <rect key="frame" x="1" y="1" width="339" height="437"/>
@@ -952,7 +952,7 @@
                                                                 </textFieldCell>
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                 <connections>
-                                                                    <binding destination="Ftd-oF-DTb" name="value" keyPath="arrangedObjects.self" id="vhj-Kw-MSA">
+                                                                    <binding destination="Ftd-oF-DTb" name="value" keyPath="arrangedObjects.attribute" id="dnS-cv-zK3">
                                                                         <dictionary key="options">
                                                                             <string key="NSNullPlaceholder">New Attribute</string>
                                                                         </dictionary>
@@ -965,16 +965,16 @@
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </clipView>
                                             <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="86t-fq-Aa8">
-                                                <rect key="frame" x="1" y="-14" width="-15" height="15"/>
+                                                <rect key="frame" x="-7" y="-14" width="0.0" height="15"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                             <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="OFA-2V-JEx">
-                                                <rect key="frame" x="-14" y="1" width="15" height="-15"/>
+                                                <rect key="frame" x="-14" y="-7" width="15" height="0.0"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                         </scrollView>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Yp-8X-60S">
-                                            <rect key="frame" x="11" y="10" width="82" height="32"/>
+                                            <rect key="frame" x="11" y="-478" width="82" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="AH3-44-AdZ">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -985,7 +985,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5r6-x8-q7I">
-                                            <rect key="frame" x="93" y="10" width="82" height="32"/>
+                                            <rect key="frame" x="93" y="-478" width="82" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="sGV-7M-SMg">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1001,12 +1001,23 @@
                             </tabViewItem>
                         </tabViewItems>
                     </tabView>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vs1-J3-gGJ">
+                        <rect key="frame" x="169" y="13" width="76" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="Apply" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="6VE-Y3-nmk">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="applyPreferences:" target="494" id="L6u-jT-Vk1"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
         </window>
         <arrayController id="sn0-4H-uRT" userLabel="Genre Array Controller">
             <connections>
-                <binding destination="vxo-Jf-P1h" name="contentArray" keyPath="values.genres" id="Fbb-r3-zMe">
+                <binding destination="vxo-Jf-P1h" name="contentArray" keyPath="values.genres" id="9PE-XC-5Tn">
                     <dictionary key="options">
                         <bool key="NSHandlesContentAsCompoundValue" value="YES"/>
                     </dictionary>
@@ -1015,7 +1026,7 @@
         </arrayController>
         <arrayController id="A0Z-Ix-twt" userLabel="Category Array Controller">
             <connections>
-                <binding destination="vxo-Jf-P1h" name="contentArray" keyPath="values.categories" id="6eQ-oL-5V5">
+                <binding destination="vxo-Jf-P1h" name="contentArray" keyPath="values.categories" id="Wea-v7-WIu">
                     <dictionary key="options">
                         <bool key="NSHandlesContentAsCompoundValue" value="YES"/>
                     </dictionary>
@@ -1024,7 +1035,7 @@
         </arrayController>
         <arrayController id="Ftd-oF-DTb" userLabel="Attribute Array Controller">
             <connections>
-                <binding destination="vxo-Jf-P1h" name="contentArray" keyPath="values.attributes" id="fns-xQ-oeB">
+                <binding destination="vxo-Jf-P1h" name="contentArray" keyPath="values.attributes" id="Cjf-0F-Fl8">
                     <dictionary key="options">
                         <bool key="NSHandlesContentAsCompoundValue" value="YES"/>
                     </dictionary>

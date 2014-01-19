@@ -58,9 +58,12 @@ script QTagAppDelegate
     property savedRating : missing value
     property savedComment : missing value
     
-    property genreList : {"Deep House", "Electro", "Electronica", "Indie", "Progressive", "Tech House", "House", "Techno", "Tool"}
-    property categoryList : {"Peak Time", "Lounge", "Chillout"}
-    property attributeList : {"Dark", "Vocals", "Glitchy", "Tribal", "Upbeat"}
+    -- Some defaults
+    property genreList : {"Genre 1", "Genre 2", "Genre 3"}
+    property categoryList : {"Category 1", "Category 2", "Category 3"}
+    property attributeList : {"Attribute 1", "Attribute 2", "Attribute 3"}
+    
+    -- Defaults to register later: {{genre:"Deep House"}, {genre:"House"}, {genre:"Tech House"}, {}}
     
     property genreStartDelimiter : "("
     property genreEndDelimiter : ")"
@@ -90,19 +93,11 @@ script QTagAppDelegate
             end try
         end if
         
-        set genreArray to genreArrayController's arrangedObjects()
-        
-        repeat with i from 1 to genrearray's |count|()
-            set oneItem to genrearray's objectAtIndex_(i-1)
-            log "Item: " & (oneItem as text)
-        end repeat
-   
-        
-        -- Setup the interface
-        setupInterface()
+        -- Apply preferences will grab the current lists and refresh the interface.
+        applyPreferences_(me)
               
         -- Start the idle loop, which is the event loop for all application events.
-        idleLoop_(idleLoopDelay) -- Interval in seconds
+    idleLoop_(idleLoopDelay) -- Interval in seconds
 	end applicationWillFinishLaunching_
 	
     --
@@ -232,7 +227,7 @@ script QTagAppDelegate
             -- Repopulate the comment preview, as this value is used in the final apply
             set nPc to ""
             
-            set nPc to nPc & ratingStartDelimiter & "Rating " & selectedTrackRating & ratingEndDelimiter & ","
+            set nPc to nPc & ratingStartDelimiter & "Rating " & ratingSelector's integerValue() & ratingEndDelimiter & ","
             
             if (categoryOne's integerValue) then
                 set nPc to nPc & categoryStartDelimiter & (item 1 of categoryList) & categoryEndDelimiter & ","
@@ -679,6 +674,48 @@ script QTagAppDelegate
     --
     on applyPreferences_(sender)
         log "Applying preferences"
+        
+        
+        set newGenres to (genreArrayController's arrangedObjects()) as list
+        if count of newGenres is not 0 then
+            set genreList to {}
+        end if
+        repeat with aGenre in newGenres
+            try
+                set theName to genre of aGenre
+                set genreList to genreList & theName
+            end try
+        end repeat
+        log "Genre list is now: " & genreList
+        
+        set newCategories to (categoryArrayController's arrangedObjects()) as list
+        if count of newCategories is greater than 8 then
+            display alert "QuickTag only supports up to 8 categories."
+        end if
+        if count of newCategories is not 0 then
+            set categoryList to {}
+        end if
+        repeat with aCategory in newCategories
+            try
+                set theCategory to category of aCategory
+                set categoryList to categoryList & theCategory
+            end try
+        end repeat
+        
+        set newAttributes to (attributeArrayController's arrangedObjects()) as list
+        if count of newAttributes is greater than 18 then
+            display alert "QuickTag only supports up to 18 attributes."
+        end if
+        if count of newAttributes is not 0 then
+            set attributeList to {}
+        end if
+        repeat with aAttribute in newAttributes
+            try
+                set theAttribute to attribute of aAttribute
+                set attributeList to attributeList & theAttribute
+            end try
+        end repeat
+        
         setupInterface()
     end applyPreferences
 
