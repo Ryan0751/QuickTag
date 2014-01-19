@@ -8,7 +8,7 @@
 
 script QTagAppDelegate
 	property parent : class "NSObject"
-    property myTitle : "Custom Tagger"
+    property myTitle : "QuickTag"
     
     -- Interface outlets for existing values.
     property currentTrack : missing value
@@ -148,8 +148,9 @@ script QTagAppDelegate
     --
     on accessHook()
        if my checkItunesIsActive() is false then
-           set opt to (display dialog "iTunes is not running." buttons {"OK"} default button 1 with title "Cannot proceed..." with icon 0 giving up after 30)
-           return false
+           -- Start the application if not running
+           tell application "iTunes" to activate
+           return true
        end if
        
        if my itunesIsNotAccesible() is true then
@@ -178,18 +179,21 @@ script QTagAppDelegate
    -- The main event loop for the application
    --
    on idleLoop_(secsDelay)
-        tell application "iTunes"
-            -- Look for a selected track
-            if selection of front browser window is not {} then
-                -- Copy values to our properties
-                copy name of current track to selectedTrackName
-                copy genre of current track to selectedTrackGenre
-                copy rating of current track to selectedTrackRating
-                copy comment of current track to selectedTrackComment
-            else
-                set selectedTrackName to ""
-            end if
-        end tell
+        try
+            tell application "iTunes"
+                -- Look for a selected track
+                if selection of front browser window is not {} then
+                    log "grabbig values from browser"
+                    -- Copy values to our properties
+                    copy name of current track to selectedTrackName
+                    copy genre of current track to selectedTrackGenre
+                    copy rating of current track to selectedTrackRating
+                    copy comment of current track to selectedTrackComment
+                else
+                    set selectedTrackName to ""
+                end if
+            end tell
+        end try
         
         -- We have a track selected
         if selectedTrackName is not ""
@@ -201,7 +205,6 @@ script QTagAppDelegate
             -- Our trigger for handling a track change is when the displayed track name differs
             -- from the track name in iTunes.
             if selectedTrackName is not equal to displayedTrack as string then
-                log "New track selected: " & selectedTrackName
                 -- Save the original values
                 set savedTrackName to selectedTrackName
                 set savedGenre to selectedTrackGenre
@@ -322,16 +325,18 @@ script QTagAppDelegate
     -- Refresh the "new" tag selectors such that they reflect the tags in the currently playing track.
     --
     on refreshNewTagSelectors()
-        tell application "iTunes"
-            -- Look for a selected track
-            if selection of front browser window is not {} then
-                -- Copy values to our properties
-                copy name of current track to selectedTrackName
-                copy genre of current track to selectedTrackGenre
-                copy rating of current track to selectedTrackRating
-                copy comment of current track to selectedTrackComment
-            end if
+        try
+            tell application "iTunes"
+                -- Look for a selected track
+                if selection of front browser window is not {} then
+                    -- Copy values to our properties
+                    copy name of current track to selectedTrackName
+                    copy genre of current track to selectedTrackGenre
+                    copy rating of current track to selectedTrackRating
+                    copy comment of current track to selectedTrackComment
+                end if
         end tell
+        end try
         
         -- Refresh the genre combo box
         repeat with theGenre in genreList
@@ -620,20 +625,22 @@ script QTagAppDelegate
     --
     on applyChanges_(sender)
         log "User applied changes"
-        tell application "iTunes"
-            set newGenre to genreComboBox's stringValue as text
-            if newGenre is not "" then
-               set genre of current track to genreStartDelimiter & newGenre & genreEndDelimiter
-            end if
-        
-            -- Multiply rating by 20 to get it in a scale of 1-100 for itunes
-            set rating of current track to ratingSelector's doubleValue() * 20
+        try
+            tell application "iTunes"
+                set newGenre to genreComboBox's stringValue as text
+                if newGenre is not "" then
+                   set genre of current track to genreStartDelimiter & newGenre & genreEndDelimiter
+                end if
             
-            set newComment to (commentPreview's stringValue as text)
-            if newComment is not "" then
-                set comment of current track to (commentPreview's stringValue as text)
-            end if
-        end tell
+                -- Multiply rating by 20 to get it in a scale of 1-100 for itunes
+                set rating of current track to ratingSelector's doubleValue() * 20
+                
+                set newComment to (commentPreview's stringValue as text)
+                if newComment is not "" then
+                    set comment of current track to (commentPreview's stringValue as text)
+                end if
+            end tell
+        end try
     end applyChanges
 
     --
@@ -643,11 +650,13 @@ script QTagAppDelegate
         set opt to (display alert "Revert Changes?" message "Revert tags to original values?" buttons {"Cancel", "Revert"} default button 1 as warning giving up after 30)
         if button returned of opt is "Revert" then
             log "Reverting changes"
-            tell application "iTunes"
-                set genre of current track to savedGenre
-                set rating of current track to savedRating
-                set comment of current track to savedComment
-            end tell
+            try
+                tell application "iTunes"
+                    set genre of current track to savedGenre
+                    set rating of current track to savedRating
+                    set comment of current track to savedComment
+                end tell
+            end try
             refreshNewTagSelectors()
             return true
         else
