@@ -179,6 +179,7 @@ script QTagAppDelegate
    -- The main event loop for the application
    --
    on idleLoop_(secsDelay)
+        set selectedTrackName to ""
         try
             tell application "iTunes"
                 -- Look for a selected track
