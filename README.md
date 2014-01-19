@@ -13,5 +13,4 @@ Additional tags supported by the program are added to the ID3 Comments field, fo
 The application is written in AppleScriptOBJC for Mac OS X (other operating systems are not supported as 
 AppleScript is required).
 
-
-
+![Alt text](http://www.ryanruel.com/pics/quicktag.jpg "QuickTag Screenshot")
