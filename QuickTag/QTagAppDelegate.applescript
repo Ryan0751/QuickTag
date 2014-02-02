@@ -63,17 +63,20 @@ script QTagAppDelegate
     property categoryList : {"Category 1", "Category 2", "Category 3"}
     property attributeList : {"Attribute 1", "Attribute 2", "Attribute 3"}
     
-    -- Defaults to register later: {{genre:"Deep House"}, {genre:"House"}, {genre:"Tech House"}, {}}
+    -- Configureable delimiters
+    property genreStartDelimiter : missing value
+    property genreEndDelimiter : missing value
+    property categoryStartDelimiter : missing value
+    property categoryEndDelimiter : missing value
+    property attributeStartDelimiter : missing value
+    property attributeEndDelimiter : missing value
+    property ratingStartDelimiter : missing value
+    property ratingEndDelimiter : missing value
     
-    property genreStartDelimiter : "("
-    property genreEndDelimiter : ")"
-    property categoryStartDelimiter : "{"
-    property categoryEndDelimiter : "}"
-    property attributeStartDelimiter : "["
-    property attributeEndDelimiter : "]"
-    property ratingStartDelimiter : "<"
-    property ratingEndDelimiter : ">"
-    
+    -- Where to write the comments
+    property commentsOverwrite : missing value
+    property commentsPrepend : missing value
+    property commentsAppend : missing value
     
     -- Our main idle loop delay period, this should be low enough to make the app appear
     -- dynamic, but not so low as to impact performance.
@@ -219,7 +222,7 @@ script QTagAppDelegate
                 refreshNewTagSelectors()
                 
             end if
-                
+            
             if selectedTrackGenre is not equal to displayedGenre as string then
                 currentGenre's setStringValue_(selectedTrackGenre)
             end if
@@ -228,82 +231,92 @@ script QTagAppDelegate
                 currentComment's setStringValue_(selectedTrackComment)
             end if
             
+            -- Grab the delimiter values
+            set genreSd to genreStartDelimiter's stringValue as text
+            set genreEd to genreEndDelimiter's stringValue as text
+            set categorySd to categoryStartDelimiter's stringValue as text
+            set categoryEd to categoryEndDelimiter's stringValue as text
+            set attributeSd to attributeStartDelimiter's stringValue as text
+            set attributeEd to attributeEndDelimiter's stringValue as text
+            set ratingSd to ratingStartDelimiter's stringValue as text
+            set ratingEd to ratingEndDelimiter's stringValue as text
+            
             -- Repopulate the comment preview, as this value is used in the final apply
             set nPc to ""
             
-            set nPc to nPc & ratingStartDelimiter & "Rating " & ratingSelector's integerValue() & ratingEndDelimiter & ","
+            set nPc to nPc & ratingSd & "Rating " & ratingSelector's integerValue() & ratingEd & ","
             
             if (categoryOne's integerValue) then
-                set nPc to nPc & categoryStartDelimiter & (item 1 of categoryList) & categoryEndDelimiter & ","
+                set nPc to nPc & categorySd & (item 1 of categoryList) & categoryEd & ","
             else if (categoryTwo's integerValue) then
-                set nPc to nPc & categoryStartDelimiter & (item 2 of categoryList) & categoryEndDelimiter & ","
+                set nPc to nPc & categorySd & (item 2 of categoryList) & categoryEd & ","
             else if (categoryThree's integerValue) then
-                set nPc to nPc & categoryStartDelimiter & (item 3 of categoryList) & categoryEndDelimiter & ","
+                set nPc to nPc & categorySd & (item 3 of categoryList) & categoryEd & ","
             else if (categoryFour's integerValue) then
-                set nPc to nPc & categoryStartDelimiter & (item 4 of categoryList) & categoryEndDelimiter & ","
+                set nPc to nPc & categorySd & (item 4 of categoryList) & categoryEd & ","
             else if (categoryFive's integerValue) then
-                set nPc to nPc & categoryStartDelimiter & (item 5 of categoryList) & categoryEndDelimiter & ","
+                set nPc to nPc & categorySd & (item 5 of categoryList) & categoryEd & ","
             else if (categorySix's integerValue) then
-                set nPc to nPc & categoryStartDelimiter & (item 6 of categoryList) & categoryEndDelimiter & ","
+                set nPc to nPc & categorySd & (item 6 of categoryList) & categoryEd & ","
             else if (categorySeven's integerValue) then
-                set nPc to nPc & categoryStartDelimiter & (item 7 of categoryList) & categoryEndDelimiter & ","
+                set nPc to nPc & categorySd & (item 7 of categoryList) & categoryEd & ","
             else if (categoryEight's integerValue) then
-                set nPc to nPc & categoryStartDelimiter & (item 8 of categoryList) & categoryEndDelimiter & ","
+                set nPc to nPc & categorySd & (item 8 of categoryList) & categoryEd & ","
             end if
             
             if (attributeOne's integerValue) then
-                set nPc to nPc & attributeStartDelimiter & (item 1 of attributeList) & attributeEndDelimiter & ","
+                set nPc to nPc & attributeSd & (item 1 of attributeList) & attributeEd & ","
             end if
             if (attributeTwo's integerValue) then
-                set nPc to nPc & attributeStartDelimiter & (item 2 of attributeList) & attributeEndDelimiter & ","
+                set nPc to nPc & attributeSd & (item 2 of attributeList) & attributeEd & ","
             end if
             if (attributeThree's integerValue) then
-                set nPc to nPc & attributeStartDelimiter & (item 3 of attributeList) & attributeEndDelimiter & ","
+                set nPc to nPc & attributeSd & (item 3 of attributeList) & attributeEd & ","
             end if
             if (attributeFour's integerValue) then
-                set nPc to nPc & attributeStartDelimiter & (item 4 of attributeList) & attributeEndDelimiter & ","
+                set nPc to nPc & attributeSd & (item 4 of attributeList) & attributeEd & ","
             end if
             if (attributeFive's integerValue) then
-                set nPc to nPc & attributeStartDelimiter & (item 5 of attributeList) & attributeEndDelimiter & ","
+                set nPc to nPc & attributeSd & (item 5 of attributeList) & attributeEd & ","
             end if
             if (attributeSix's integerValue) then
-                set nPc to nPc & attributeStartDelimiter & (item 6 of attributeList) & attributeEndDelimiter & ","
+                set nPc to nPc & attributeSd & (item 6 of attributeList) & attributeEd & ","
             end if
             if (attributeSeven's integerValue) then
-                set nPc to nPc & attributeStartDelimiter & (item 7 of attributeList) & attributeEndDelimiter & ","
+                set nPc to nPc & attributeSd & (item 7 of attributeList) & attributeEd & ","
             end if
             if (attributeEight's integerValue) then
-                set nPc to nPc & attributeStartDelimiter & (item 8 of attributeList) & attributeEndDelimiter & ","
+                set nPc to nPc & attributeSd & (item 8 of attributeList) & attributeEd & ","
             end if
             if (attributeNine's integerValue) then
-                set nPc to nPc & attributeStartDelimiter & (item 9 of attributeList) & attributeEndDelimiter & ","
+                set nPc to nPc & attributeSd & (item 9 of attributeList) & attributeEd & ","
             end if
             if (attributeTen's integerValue) then
-                set nPc to nPc & attributeStartDelimiter & (item 10 of attributeList) & attributeEndDelimiter & ","
+                set nPc to nPc & attributeSd & (item 10 of attributeList) & attributeEd & ","
             end if
             if (attributeEleven's integerValue) then
-                set nPc to nPc & attributeStartDelimiter & (item 11 of attributeList) & attributeEndDelimiter & ","
+                set nPc to nPc & attributeSd & (item 11 of attributeList) & attributeEd & ","
             end if
             if (attributeTwelve's integerValue) then
-                set nPc to nPc & attributeStartDelimiter & (item 12 of attributeList) & attributeEndDelimiter & ","
+                set nPc to nPc & attributeSd & (item 12 of attributeList) & attributeEd & ","
             end if
             if (attributeThirteen's integerValue) then
-                set nPc to nPc & attributeStartDelimiter & (item 13 of attributeList) & attributeEndDelimiter & ","
+                set nPc to nPc & attributeSd & (item 13 of attributeList) & attributeEd & ","
             end if
             if (attributeFourteen's integerValue) then
-                set nPc to nPc & attributeStartDelimiter & (item 14 of attributeList) & attributeEndDelimiter & ","
+                set nPc to nPc & attributeSd & (item 14 of attributeList) & attributeEd & ","
             end if
             if (attributeFifteen's integerValue) then
-                set nPc to nPc & attributeStartDelimiter & (item 15 of attributeList) & attributeEndDelimiter & ","
+                set nPc to nPc & attributeSd & (item 15 of attributeList) & attributeEd & ","
             end if
             if (attributeSixteen's integerValue) then
-                set nPc to nPc & attributeStartDelimiter & (item 16 of attributeList) & attributeEndDelimiter & ","
+                set nPc to nPc & attributeSd & (item 16 of attributeList) & attributeEd & ","
             end if
             if (attributeSeventeen's integerValue) then
-                set nPc to nPc & attributeStartDelimiter & (item 17 of attributeList) & attributeEndDelimiter & ","
+                set nPc to nPc & attributeSd & (item 17 of attributeList) & attributeEd & ","
             end if
             if (attributeEighteen's integerValue) then
-                set nPc to nPc & attributeStartDelimiter & (item 18 of attributeList) & attributeEndDelimiter & ","
+                set nPc to nPc & attributeSd & (item 18 of attributeList) & attributeEd & ","
             end if
            
             -- Trim off any trailing ,
@@ -359,8 +372,18 @@ script QTagAppDelegate
         categorySeven's setIntegerValue_(0)
         categoryEight's setIntegerValue_(0)
         
+        -- Grab the delimiter values
+        set genreSd to genreStartDelimiter's stringValue as text
+        set genreEd to genreEndDelimiter's stringValue as text
+        set categorySd to categoryStartDelimiter's stringValue as text
+        set categoryEd to categoryEndDelimiter's stringValue as text
+        set attributeSd to attributeStartDelimiter's stringValue as text
+        set attributeEd to attributeEndDelimiter's stringValue as text
+        set ratingSd to ratingStartDelimiter's stringValue as text
+        set ratingEd to ratingEndDelimiter's stringValue as text
+        
         repeat with theCategoryIndex from 1 to count of the categoryList
-            if selectedTrackComment contains (categoryStartDelimiter & (item theCategoryIndex of categoryList) & categoryEndDelimiter) then
+            if selectedTrackComment contains (categorySd & (item theCategoryIndex of categoryList) & categoryEd) then
                 if theCategoryIndex is 1 then
                     categoryOne's setIntegerValue_(1)
                 else if theCategoryIndex is 2 then
@@ -401,45 +424,47 @@ script QTagAppDelegate
         attributeEighteen's setIntegerValue_(0)
         
         repeat with theAttributeIndex from 1 to count of the attributeList
-            if selectedTrackComment contains (attributeStartDelimiter & (item theAttributeIndex of attributeList) & attributeEndDelimiter) then
-                if theAttributeIndex is 1 then
-                    attributeOne's setIntegerValue_(1)
-                else if theAttributeIndex is 2 then
-                    attributeTwo's setIntegerValue_(1)
-                else if theAttributeIndex is 3 then
-                    attributeThree's setIntegerValue_(1)
-                else if theAttributeIndex is 4 then
-                    attributeFour's setIntegerValue_(1)
-                else if theAttributeIndex is 5 then
-                    attributeFive's setIntegerValue_(1)
-                else if theAttributeIndex is 6 then
-                    attributeSix's setIntegerValue_(1)
-                else if theAttributeIndex is 7 then
-                    attributeSeven's setIntegerValue_(1)
-                else if theAttributeIndex is 8 then
-                    attributeEight's setIntegerValue_(1)
-                else if theAttributeIndex is 9 then
-                    attributeNine's setIntegerValue_(1)
-                else if theAttributeIndex is 10 then
-                    attributeTen's setIntegerValue_(1)
-                else if theAttributeIndex is 11 then
-                    attributeEleven's setIntegerValue_(1)
-                else if theAttributeIndex is 12 then
-                    attributeTwelve's setIntegerValue_(1)
-                else if theAttributeIndex is 13 then
-                    attributeThirteen's setIntegerValue_(1)
-                else if theAttributeIndex is 14 then
-                    attributeFourteen's setIntegerValue_(1)
-                else if theAttributeIndex is 15 then
-                    attributeFifteen's setIntegerValue_(1)
-                else if theAttributeIndex is 16 then
-                    attributeSixteen's setIntegerValue_(1)
-                else if theAttributeIndex is 17 then
-                    attributeSeventeen's setIntegerValue_(1)
-                else if theAttributeIndex is 18 then
-                    attributeEighteen's setIntegerValue_(1)
-                end if
+            try
+                if selectedTrackComment contains (attributeSd & (item theAttributeIndex of attributeList) & attributeEd) then
+                    if theAttributeIndex is 1 then
+                        attributeOne's setIntegerValue_(1)
+                    else if theAttributeIndex is 2 then
+                        attributeTwo's setIntegerValue_(1)
+                    else if theAttributeIndex is 3 then
+                        attributeThree's setIntegerValue_(1)
+                    else if theAttributeIndex is 4 then
+                        attributeFour's setIntegerValue_(1)
+                    else if theAttributeIndex is 5 then
+                        attributeFive's setIntegerValue_(1)
+                    else if theAttributeIndex is 6 then
+                        attributeSix's setIntegerValue_(1)
+                    else if theAttributeIndex is 7 then
+                        attributeSeven's setIntegerValue_(1)
+                    else if theAttributeIndex is 8 then
+                        attributeEight's setIntegerValue_(1)
+                    else if theAttributeIndex is 9 then
+                        attributeNine's setIntegerValue_(1)
+                    else if theAttributeIndex is 10 then
+                        attributeTen's setIntegerValue_(1)
+                    else if theAttributeIndex is 11 then
+                        attributeEleven's setIntegerValue_(1)
+                    else if theAttributeIndex is 12 then
+                        attributeTwelve's setIntegerValue_(1)
+                    else if theAttributeIndex is 13 then
+                        attributeThirteen's setIntegerValue_(1)
+                    else if theAttributeIndex is 14 then
+                        attributeFourteen's setIntegerValue_(1)
+                    else if theAttributeIndex is 15 then
+                        attributeFifteen's setIntegerValue_(1)
+                    else if theAttributeIndex is 16 then
+                        attributeSixteen's setIntegerValue_(1)
+                    else if theAttributeIndex is 17 then
+                        attributeSeventeen's setIntegerValue_(1)
+                    else if theAttributeIndex is 18 then
+                        attributeEighteen's setIntegerValue_(1)
+                    end if
             end if
+            end try
         end repeat
 
     end refreshNewTagSelectors
@@ -626,11 +651,16 @@ script QTagAppDelegate
     --
     on applyChanges_(sender)
         log "User applied changes"
+        
+        -- Grab the delimiter values
+        set genreSd to genreStartDelimiter's stringValue as text
+        set genreEd to genreEndDelimiter's stringValue as text
+
         try
             tell application "iTunes"
                 set newGenre to genreComboBox's stringValue as text
                 if newGenre is not "" then
-                   set genre of current track to genreStartDelimiter & newGenre & genreEndDelimiter
+                   set genre of current track to genreSd & newGenre & genreEd
                 end if
             
                 -- Multiply rating by 20 to get it in a scale of 1-100 for itunes
@@ -685,7 +715,6 @@ script QTagAppDelegate
     on applyPreferences_(sender)
         log "Applying preferences"
         
-        
         set newGenres to (genreArrayController's arrangedObjects()) as list
         if count of newGenres is not 0 then
             set genreList to {}
@@ -696,8 +725,7 @@ script QTagAppDelegate
                 set genreList to genreList & theName
             end try
         end repeat
-        log "Genre list is now: " & genreList
-        
+                
         set newCategories to (categoryArrayController's arrangedObjects()) as list
         if count of newCategories is greater than 8 then
             display alert "QuickTag only supports up to 8 categories."
