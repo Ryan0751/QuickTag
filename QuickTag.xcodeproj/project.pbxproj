@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D129B5B1186C551100422DCA /* QuickTag_512x512@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D129B5B0186C551100422DCA /* QuickTag_512x512@2x.png */; };
-		D129B5B7186C5A7700422DCA /* QuickTag_128x128.png in Resources */ = {isa = PBXBuildFile; fileRef = D129B5B6186C5A7700422DCA /* QuickTag_128x128.png */; };
+		D199E0D8189EC1A5003D8EBD /* QuickTag.png in Resources */ = {isa = PBXBuildFile; fileRef = D199E0D7189EC1A5003D8EBD /* QuickTag.png */; };
 		D1FAAE1A185CA05F0063BF6B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1FAAE19185CA05F0063BF6B /* Cocoa.framework */; };
 		D1FAAE1C185CA05F0063BF6B /* AppleScriptObjC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1FAAE1B185CA05F0063BF6B /* AppleScriptObjC.framework */; };
 		D1FAAE26185CA05F0063BF6B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D1FAAE24185CA05F0063BF6B /* InfoPlist.strings */; };
@@ -20,9 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		D129B5B0186C551100422DCA /* QuickTag_512x512@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "QuickTag_512x512@2x.png"; sourceTree = "<group>"; };
-		D129B5B6186C5A7700422DCA /* QuickTag_128x128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = QuickTag_128x128.png; sourceTree = "<group>"; };
 		D13AE2F4186863D500C23F2C /* QuickTag.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = QuickTag.entitlements; sourceTree = "<group>"; };
+		D199E0D7189EC1A5003D8EBD /* QuickTag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = QuickTag.png; sourceTree = "<group>"; };
 		D1FAAE16185CA05F0063BF6B /* QuickTag.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuickTag.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1FAAE19185CA05F0063BF6B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		D1FAAE1B185CA05F0063BF6B /* AppleScriptObjC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppleScriptObjC.framework; path = System/Library/Frameworks/AppleScriptObjC.framework; sourceTree = SDKROOT; };
@@ -104,8 +102,7 @@
 		D1FAAE22185CA05F0063BF6B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				D129B5B6186C5A7700422DCA /* QuickTag_128x128.png */,
-				D129B5B0186C551100422DCA /* QuickTag_512x512@2x.png */,
+				D199E0D7189EC1A5003D8EBD /* QuickTag.png */,
 				D1FAAE23185CA05F0063BF6B /* QuickTag-Info.plist */,
 				D1FAAE24185CA05F0063BF6B /* InfoPlist.strings */,
 				D1FAAE27185CA05F0063BF6B /* main.m */,
@@ -178,12 +175,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D129B5B1186C551100422DCA /* QuickTag_512x512@2x.png in Resources */,
 				D1FAAE26185CA05F0063BF6B /* InfoPlist.strings in Resources */,
+				D199E0D8189EC1A5003D8EBD /* QuickTag.png in Resources */,
 				D1FAAE33185CA05F0063BF6B /* Images.xcassets in Resources */,
 				D1FAAE2C185CA05F0063BF6B /* Credits.rtf in Resources */,
 				D1FAAE31185CA05F0063BF6B /* MainMenu.xib in Resources */,
-				D129B5B7186C5A7700422DCA /* QuickTag_128x128.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -302,11 +298,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "QuickTag/QuickTag-Prefix.pch";
 				INFOPLIST_FILE = "QuickTag/QuickTag-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -316,11 +314,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "QuickTag/QuickTag-Prefix.pch";
 				INFOPLIST_FILE = "QuickTag/QuickTag-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

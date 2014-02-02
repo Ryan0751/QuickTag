@@ -161,7 +161,7 @@ script QTagAppDelegate
        if my isFullScreen() then
            log "iTUNES IS IN FULL SCREEN MODE"
            delay 0.5
-           set opt to (display alert "iTunes is in full screen mode." message "This applet's interface cannot be displayed with iTunes while in full screen mode.
+           set opt to (display alert "iTunes is in full screen mode" message "This applet's interface cannot be displayed with iTunes while in full screen mode.
            
            You can Quit and re-launch this application after taking iTunes out of full screen mode.
            
@@ -728,6 +728,33 @@ script QTagAppDelegate
         
         setupInterface()
     end applyPreferences
+
+    --
+    -- Get a list of unique genres, for importing to the genre list
+    --
+    on importGenres_(sender)
+        set opt to (display alert "Import genres from iTunes?" message "Import all existing genres from iTunes? \nThis may take a while."  buttons {"Cancel", "Import"} default button 1 as warning giving up after 30)
+        
+        if button returned of opt is "import" then
+            try
+                tell application "iTunes"
+                    set len to count of tracks
+                    repeat with num from 1 to len
+                        if num is equal to 1 then set importGenreList to {}
+                        set gen to genre of track num
+                        if gen is not in importGenreList then copy gen to the end of importGenreList
+                    end repeat 
+                end tell
+            end try
+            log "Imported Genre List: " & importGenrelist
+            set tempList to {}
+            repeat with i from 1 to count of importGenrelist
+                set end of tempList to {genre:item i of importGenrelist}
+            end repeat
+            tell genreArrayController to addObjects_(tempList)
+            
+        end if
+    end importGenres
 
 end script
 
