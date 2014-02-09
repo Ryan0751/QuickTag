@@ -324,7 +324,7 @@
                                 <textField identifier="currentComments" toolTip="Current Track Comments" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pM6-ix-A37">
                                     <rect key="frame" x="99" y="18" width="459" height="71"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" state="on" placeholderString="New tracks comments will be indicated here." id="HCx-7G-TUf">
+                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" state="on" placeholderString="New track comments will be shown here." id="HCx-7G-TUf">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -630,11 +630,11 @@
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="QuickTag" id="s4Y-ve-aJq"/>
                     </imageView>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SW8-HN-8HU">
-                        <rect key="frame" x="112" y="674" width="412" height="51"/>
+                        <rect key="frame" x="104" y="656" width="479" height="68"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" id="Pf9-Nr-tbl">
                             <font key="font" metaFont="system"/>
-                            <string key="title">To get started, play a track in iTunes.  Select a new genre, rating, category and some attributes, and click apply to save.  Open the Preferences window to set up your own tag values!</string>
+                            <string key="title">To get started, play a track in iTunes.  Select a new genre, rating, category and some attributes, and click apply to save.  Open the Preferences window to set up custom tag values and options.</string>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -678,6 +678,7 @@
                 <outlet property="categoryTwo" destination="0KU-gc-JyY" id="RCs-5r-yZm"/>
                 <outlet property="commentPreview" destination="pM6-ix-A37" id="Lvr-bE-wl6"/>
                 <outlet property="commentsAppend" destination="4ln-MS-btC" id="kou-bz-VvN"/>
+                <outlet property="commentsDestination" destination="k1l-bq-tz0" id="vly-yE-3vr"/>
                 <outlet property="commentsOverwrite" destination="Bkr-L8-GFM" id="LAN-kl-jgu"/>
                 <outlet property="commentsPrepend" destination="Z4l-jK-UI5" id="dif-zo-KAH"/>
                 <outlet property="currentComment" destination="Iic-pF-s6D" id="Pd1-e5-uD2"/>
@@ -690,6 +691,7 @@
                 <outlet property="ratingEndDelimiter" destination="ASH-nP-dHj" id="Urn-3y-iqh"/>
                 <outlet property="ratingSelector" destination="zKl-WR-Z37" id="4N1-aZ-yca"/>
                 <outlet property="ratingStartDelimiter" destination="LuH-cg-pZw" id="2bz-1R-QeL"/>
+                <outlet property="tagLine" destination="ZgQ-1e-2XE" id="BC1-Jb-5ir"/>
             </connections>
         </customObject>
         <customObject id="420" customClass="NSFontManager"/>
@@ -1023,26 +1025,20 @@
                                                     <buttonCell type="radio" title="Overwrite existing comments" imagePosition="left" alignment="left" state="on" tag="1" inset="2" id="Bkr-L8-GFM">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                         <font key="font" metaFont="system"/>
-                                                        <connections>
-                                                            <binding destination="vxo-Jf-P1h" name="value" keyPath="values.overwriteExisting" id="X89-74-N6K"/>
-                                                        </connections>
                                                     </buttonCell>
                                                     <buttonCell type="radio" title="Write before existing comments" imagePosition="left" alignment="left" inset="2" id="Z4l-jK-UI5">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                         <font key="font" metaFont="system"/>
-                                                        <connections>
-                                                            <binding destination="vxo-Jf-P1h" name="value" keyPath="values.prependExisting" id="3dW-1X-izi"/>
-                                                        </connections>
                                                     </buttonCell>
                                                     <buttonCell type="radio" title="Write after existing comments" imagePosition="left" alignment="left" inset="2" id="4ln-MS-btC">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                         <font key="font" metaFont="system"/>
-                                                        <connections>
-                                                            <binding destination="vxo-Jf-P1h" name="value" keyPath="values.appendExisting" id="wnu-MM-m6U"/>
-                                                        </connections>
                                                     </buttonCell>
                                                 </column>
                                             </cells>
+                                            <connections>
+                                                <binding destination="vxo-Jf-P1h" name="selectedValue" keyPath="values.tagDestination" id="VY1-j4-eGb"/>
+                                            </connections>
                                         </matrix>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XfM-Fe-4Aj">
                                             <rect key="frame" x="15" y="453" width="345" height="17"/>
@@ -1099,7 +1095,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <box autoresizesSubviews="NO" verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="RHH-n6-6Tx">
-                                            <rect key="frame" x="9" y="355" width="349" height="5"/>
+                                            <rect key="frame" x="9" y="355" width="357" height="5"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                                             <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1214,6 +1210,34 @@
                                             <rect key="frame" x="180" y="285" width="28" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="End" id="maa-nW-mNf">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <box autoresizesSubviews="NO" verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="Iam-cg-2me">
+                                            <rect key="frame" x="9" y="127" width="357" height="5"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                                            <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            <font key="titleFont" metaFont="system"/>
+                                        </box>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZgQ-1e-2XE">
+                                            <rect key="frame" x="17" y="68" width="330" height="22"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="Tagged with QuickTag" placeholderString="Tagged with QuickTag" drawsBackground="YES" usesSingleLineMode="YES" id="wK4-UG-cyk">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <connections>
+                                                <binding destination="vxo-Jf-P1h" name="value" keyPath="values.customTagline" id="HLg-S0-4Mu"/>
+                                            </connections>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XGw-zt-oOU">
+                                            <rect key="frame" x="16" y="98" width="130" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Additional Tag Line:" id="KLi-Md-HjJ">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

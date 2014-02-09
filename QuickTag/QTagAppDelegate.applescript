@@ -10,6 +10,9 @@ script QTagAppDelegate
 	property parent : class "NSObject"
     property myTitle : "QuickTag"
     
+    -- User default
+    property defaults : missing value
+    
     -- Interface outlets for existing values.
     property currentTrack : missing value
     property currentGenre : missing value
@@ -73,7 +76,11 @@ script QTagAppDelegate
     property ratingStartDelimiter : missing value
     property ratingEndDelimiter : missing value
     
+    -- Additional tagline
+    property tagLine : missing value
+    
     -- Where to write the comments
+    property commentsDestination : missing value
     property commentsOverwrite : missing value
     property commentsPrepend : missing value
     property commentsAppend : missing value
@@ -95,6 +102,11 @@ script QTagAppDelegate
                 return
             end try
         end if
+        
+        -- Set up the standard user defaults
+        tell current application's NSUserDefaults to set defaults to standardUserDefaults()
+        
+        tell defaults to registerDefaults_({tagDestination:"Overwrite existing comments", genreStartDelim:"(", genreEndDelim:")", ratingStartDelim:"<", ratingEndDelim:">", categoryStartDelim:"{", categoryEndDelim:"}", attributeStartDelim:"[", attributeEndDelim:"]", customTagline:"Tagged with QuickTag"})
         
         -- Apply preferences will grab the current lists and refresh the interface.
         applyPreferences_(me)
@@ -324,8 +336,16 @@ script QTagAppDelegate
                 if (the last character of nPc is ",") then set nPc to text 1 thru ((length of nPc) - 1) of nPc as text
             end if
  
+            set additionalTagLine to tagLine's stringValue as text
+            if additionalTagLine is not "" then
+                set nPc to nPc & "\n" & additionalTagLine
+            end if
             
-            set nPc to nPc & "\n\nTagged with QuickTag"
+            if (commentsPrepend's integerValue)
+                set nPc to nPc & "\n" & selectedTrackComment
+            else if (commentsAppend's integerValue)
+                set nPc to selectedTrackComment & "\n" & nPc
+            end if
       
             commentPreview's setStringValue_(nPc)
           
@@ -761,7 +781,7 @@ script QTagAppDelegate
     -- Get a list of unique genres, for importing to the genre list
     --
     on importGenres_(sender)
-        set opt to (display alert "Import genres from iTunes?" message "Import all existing genres from iTunes? \nThis may take a while."  buttons {"Cancel", "Import"} default button 1 as warning giving up after 30)
+        set opt to (display alert "Import genres from iTunes?" message "Import all existing genres found in existing tracks in iTunes? \nThis may take a while."  buttons {"Cancel", "Import"} default button 1 as warning giving up after 30)
         
         if button returned of opt is "import" then
             try
