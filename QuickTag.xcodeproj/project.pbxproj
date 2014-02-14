@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D125591E18AE7949007AF4FB /* QuickTag.help in Resources */ = {isa = PBXBuildFile; fileRef = D125591D18AE7949007AF4FB /* QuickTag.help */; };
 		D199E0D8189EC1A5003D8EBD /* QuickTag.png in Resources */ = {isa = PBXBuildFile; fileRef = D199E0D7189EC1A5003D8EBD /* QuickTag.png */; };
 		D1FAAE1A185CA05F0063BF6B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1FAAE19185CA05F0063BF6B /* Cocoa.framework */; };
 		D1FAAE1C185CA05F0063BF6B /* AppleScriptObjC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1FAAE1B185CA05F0063BF6B /* AppleScriptObjC.framework */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D125591D18AE7949007AF4FB /* QuickTag.help */ = {isa = PBXFileReference; lastKnownFileType = folder; path = QuickTag.help; sourceTree = "<group>"; };
 		D13AE2F4186863D500C23F2C /* QuickTag.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = QuickTag.entitlements; sourceTree = "<group>"; };
 		D199E0D7189EC1A5003D8EBD /* QuickTag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = QuickTag.png; sourceTree = "<group>"; };
 		D1FAAE16185CA05F0063BF6B /* QuickTag.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuickTag.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -102,6 +104,7 @@
 		D1FAAE22185CA05F0063BF6B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D125591D18AE7949007AF4FB /* QuickTag.help */,
 				D199E0D7189EC1A5003D8EBD /* QuickTag.png */,
 				D1FAAE23185CA05F0063BF6B /* QuickTag-Info.plist */,
 				D1FAAE24185CA05F0063BF6B /* InfoPlist.strings */,
@@ -178,6 +181,7 @@
 				D1FAAE26185CA05F0063BF6B /* InfoPlist.strings in Resources */,
 				D199E0D8189EC1A5003D8EBD /* QuickTag.png in Resources */,
 				D1FAAE33185CA05F0063BF6B /* Images.xcassets in Resources */,
+				D125591E18AE7949007AF4FB /* QuickTag.help in Resources */,
 				D1FAAE2C185CA05F0063BF6B /* Credits.rtf in Resources */,
 				D1FAAE31185CA05F0063BF6B /* MainMenu.xib in Resources */,
 			);
