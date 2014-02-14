@@ -735,7 +735,7 @@ script QTagAppDelegate
     on applyPreferences_(sender)
         log "Applying preferences"
         
-               
+        
         set newGenres to (genreArrayController's arrangedObjects()) as list
         if count of newGenres is not 0 then
             set genreList to {}
