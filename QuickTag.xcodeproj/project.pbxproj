@@ -304,7 +304,7 @@
 				GCC_PREFIX_HEADER = "QuickTag/QuickTag-Prefix.pch";
 				INFOPLIST_FILE = "QuickTag/QuickTag-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "2C1D51DF-6C24-4989-9838-1E96A8152D73";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -320,7 +320,7 @@
 				GCC_PREFIX_HEADER = "QuickTag/QuickTag-Prefix.pch";
 				INFOPLIST_FILE = "QuickTag/QuickTag-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "2C1D51DF-6C24-4989-9838-1E96A8152D73";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
