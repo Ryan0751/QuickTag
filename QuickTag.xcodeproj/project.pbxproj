@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D183A51718AEAF2E00E70C10 /* QuickTagHelp in Resources */ = {isa = PBXBuildFile; fileRef = D183A51618AEAF2E00E70C10 /* QuickTagHelp */; };
 		D199E0D8189EC1A5003D8EBD /* QuickTag.png in Resources */ = {isa = PBXBuildFile; fileRef = D199E0D7189EC1A5003D8EBD /* QuickTag.png */; };
 		D1FAAE1A185CA05F0063BF6B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1FAAE19185CA05F0063BF6B /* Cocoa.framework */; };
 		D1FAAE1C185CA05F0063BF6B /* AppleScriptObjC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1FAAE1B185CA05F0063BF6B /* AppleScriptObjC.framework */; };
@@ -20,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		D13AE2F4186863D500C23F2C /* QuickTag.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = QuickTag.entitlements; sourceTree = "<group>"; };
+		D183A51618AEAF2E00E70C10 /* QuickTagHelp */ = {isa = PBXFileReference; lastKnownFileType = folder; path = QuickTagHelp; sourceTree = "<group>"; };
 		D199E0D7189EC1A5003D8EBD /* QuickTag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = QuickTag.png; sourceTree = "<group>"; };
 		D1FAAE16185CA05F0063BF6B /* QuickTag.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuickTag.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1FAAE19185CA05F0063BF6B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -50,9 +52,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D183A51518AEAB0C00E70C10 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D183A51618AEAF2E00E70C10 /* QuickTagHelp */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		D1FAAE0D185CA05F0063BF6B = {
 			isa = PBXGroup;
 			children = (
+				D183A51518AEAB0C00E70C10 /* Resources */,
 				D1FAAE21185CA05F0063BF6B /* QuickTag */,
 				D1FAAE18185CA05F0063BF6B /* Frameworks */,
 				D1FAAE17185CA05F0063BF6B /* Products */,
@@ -179,6 +190,7 @@
 				D199E0D8189EC1A5003D8EBD /* QuickTag.png in Resources */,
 				D1FAAE33185CA05F0063BF6B /* Images.xcassets in Resources */,
 				D1FAAE2C185CA05F0063BF6B /* Credits.rtf in Resources */,
+				D183A51718AEAF2E00E70C10 /* QuickTagHelp in Resources */,
 				D1FAAE31185CA05F0063BF6B /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
