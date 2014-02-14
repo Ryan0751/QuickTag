@@ -1,16 +1,23 @@
-QuickTag
-========
+![QuickTag](/Images/icon.png)
 
-QuickTag For iTunes is a companion application for iTunes. QuickTag allows a user to quickly click through tracks in 
-their music library, and click off custom tags which can then be written to the ID3 tags of the tracks.
+### About
+QuickTag for iTunes was developed to solve a problem frequently encoutered by DJ's trying to organize large music collections.  Although originally intended for DJ's, QuickTag can be used for anyone with a large music collection wanting to better sort their music.
 
-These meta-data tags are added with uniquely identifiable delimiters, such that the user can later use iTunes
-smart-playlist feature to easily filter tracks based on the meta-data tags.
+QuickTag runs along side iTunes.  It allows you to configure a list of custom track genres, categories, and attributes.  When a track is played in iTunes, it's display in QuickTag, and you can quickly tick off the new genre, a rating, a category and any number of your configured attributes.  
 
-For example, a customized genres is added as: (Genre), to the ID3 Genre field.
-Additional tags supported by the program are added to the ID3 Comments field, for example: {House Music},[Light Vocal]
+After clicking "Apply", the tracks ID3 genre tag is updated with the new genre, and all of the additional fields are written to the ID3 comments field.  The tags are written in such a way that you can then utilize iTunes smart-playlist feature to search for, sort and organize your tracks however you like.
 
-The application is written in AppleScriptOBJC for Mac OS X (other operating systems are not supported as 
-AppleScript is required).
+![Alt text](/Images/mainwindow_full.png "QuickTag Main Window")
 
-![Alt text](http://www.ryanruel.com/pics/quicktag.jpg "QuickTag Screenshot")
+### System Requirements
+QuickTag requires a Macintosh with iTunes in order to run.  Other operating systems are not supported.
+
+### Building
+QuickTag is written in AppleScriptObjC using OSX 10.9 (Mavericks) and XCode 5. Simply download the source, open the XCode project file, and build and run the application.
+
+### Binary Downloads, Documentation, etc.
+The binary version of QuickTag can be downloaded at the QuickTag homepage:
+
+http://www.ryanruel.com/quicktag/
+
+QuickTag includes application help, and additional help can be found at the Wiki page here on GitHub.
