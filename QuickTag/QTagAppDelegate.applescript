@@ -10,19 +10,19 @@ script QTagAppDelegate
 	property parent : class "NSObject"
     property myTitle : "QuickTag"
     
-    -- User default
+    -- Shared user defaults
     property defaults : missing value
     
-    -- Max values
+    -- Limits
     property maxCategories : 8
     property maxAttributes : 18
     
-    -- Interface outlets for existing values.
+    -- Interface outlets for existing track tags
     property currentTrack : missing value
     property currentGenre : missing value
     property currentComment : missing value
     
-    -- Interface outlets for the new values.
+    -- Interface outlets for the newly selected
     property genreComboBox : missing value
     property ratingSelector : missing value
     property commentPreview : missing value
@@ -55,22 +55,24 @@ script QTagAppDelegate
     property attributeSeventeen : missing value
     property attributeEighteen : missing value
     
+    -- Array controllers for the configurable lists in user preferences
     property genreArrayController : missing value
     property categoryArrayController : missing value
     property attributeArrayController : missing value
     
-    -- Saved values such that we can revert the user changes
+    -- Save values so that we can revert the user changes if requested
     property savedName : missing value
     property savedGenre : missing value
     property savedRating : missing value
     property savedComment : missing value
     
-    -- The lists of genres, categories and attributes.
+    -- The lists of genres, categories and attributes, broken out from the arrays
+    -- for easier access.
     property genreList : missing value
     property categoryList : missing value
     property attributeList : missing value
     
-    -- Configureable delimiters
+    -- Interface outlets for the delimiters
     property genreStartDelimiter : missing value
     property genreEndDelimiter : missing value
     property categoryStartDelimiter : missing value
@@ -80,10 +82,10 @@ script QTagAppDelegate
     property ratingStartDelimiter : missing value
     property ratingEndDelimiter : missing value
     
-    -- Additional tagline
+    -- Additional tagline outlet
     property tagLine : missing value
     
-    -- Where to write the comments
+    -- Where to write track comments (outlets from user prefs)
     property commentsDestination : missing value
     property commentsOverwrite : missing value
     property commentsPrepend : missing value
@@ -107,19 +109,20 @@ script QTagAppDelegate
             end try
         end if
         
-        -- Set up the standard user defaults
+        -- Register standard user defaults
         tell current application's NSUserDefaults to set defaults to standardUserDefaults()
         
         set genreDefaults to {{genre:"Genre 1"},{genre:"Genre 2"}, {genre:"Genre 3"}}
         set categoryDefaults to {{category:"Category 1"},{category:"Category 2"}, {category:"Category 3"}}
         set attributeDefaults to {{attribute:"Attribute 1"},{attribute:"Attribute 2"}, {attribute:"Attribute 3"}}
         
+        log "Registering user defaults"
         tell defaults to registerDefaults_({tagDestination:"Overwrite existing comments", genreStartDelim:"(", genreEndDelim:")", ratingStartDelim:"<", ratingEndDelim:">", categoryStartDelim:"{", categoryEndDelim:"}", attributeStartDelim:"[", attributeEndDelim:"]", customTagline:"Tagged with QuickTag", genres:genreDefaults, categories:categoryDefaults, attributes:attributeDefaults})
         
-        -- Apply preferences will grab the current lists and refresh the interface.
+        -- Apply preferences to grab the current configured values and refresh the interface
         applyPreferences_(me)
               
-        -- Start the idle loop, which is the event loop for all application events.
+        -- Start the idle loop, which is the event loop for all application events
     idleLoop_(idleLoopDelay) -- Interval in seconds
 	end applicationWillFinishLaunching_
 	
@@ -127,18 +130,19 @@ script QTagAppDelegate
     -- Application termination
     --
 	on applicationShouldTerminate_(sender)
+        log "Application terminating"
 		return current application's NSTerminateNow
 	end applicationShouldTerminate_
     
     --
-    -- is iTunes active?
+    -- Check if iTunes is active
     --
     to checkItunesIsActive()
         tell application "iTunes" to return running
     end checkItunesIsActive
 
     --
-    -- is iTunes accessible?
+    -- Check if iTunes is accessible
     --
     on itunesIsNotAccesible()
         try
@@ -152,7 +156,7 @@ script QTagAppDelegate
     end itunesIsNotAccesible
 
     --
-    -- is iTunes full screen?
+    -- Check if iTunes is runninng full-screen
     --
     on isFullScreen()
         try
@@ -167,7 +171,7 @@ script QTagAppDelegate
     end isFullScreen
 
     --
-    -- Ensure that iTunes is running, and is not in full screen mode.
+    -- Ensure that iTunes is in a state we can work with
     --
     on accessHook()
        if my checkItunesIsActive() is false then
@@ -177,7 +181,7 @@ script QTagAppDelegate
        end if
        
        if my itunesIsNotAccesible() is true then
-           set opt to (display dialog "Close any utility windows that may be open in iTunes." buttons {"OK"} default button 1 with title "Cannot proceed..." with icon 0 giving up after 30)
+           set opt to (display dialog "Please close any utility windows that may be open in iTunes" buttons {"OK"} default button 1 with title "Cannot proceed..." with icon 0 giving up after 30)
            return false
        end if
        
@@ -199,7 +203,8 @@ script QTagAppDelegate
    end accessHook
 
    --
-   -- The main event loop for the application
+   -- The main event loop for the application.  We have to poll iTunes as we don't have a
+   -- way to receive asynchronous events from it.
    --
    on idleLoop_(secsDelay)
         set selectedTrackName to ""
@@ -207,8 +212,8 @@ script QTagAppDelegate
             tell application "iTunes"
                 -- Look for a selected track
                 if selection of front browser window is not {} then
-                    log "grabbig values from browser"
-                    -- Copy values to our properties
+                    log "Grabbing tag values from the iTunes track browser"
+                    -- Copy values to our properties for use later
                     copy name of current track to selectedTrackName
                     copy genre of current track to selectedTrackGenre
                     copy rating of current track to selectedTrackRating
@@ -221,7 +226,7 @@ script QTagAppDelegate
         
         -- We have a track selected
         if selectedTrackName is not ""
-            -- Grab any the tag values currently in the interface
+            -- Grab the tag values currently in the interface
             set displayedTrack to currentTrack's stringValue
             set displayedGenre to currentGenre's stringValue
             set displayedComment to currentComment's stringValue
@@ -229,8 +234,9 @@ script QTagAppDelegate
             -- Our trigger for handling a track change is when the displayed track name differs
             -- from the track name in iTunes.
             if selectedTrackName is not equal to displayedTrack as string then
+                log "New track selected: " & selectedTrackName
                 -- Save the original values
-                set savedTrackName to selectedTrackName
+                set savedName to selectedTrackName
                 set savedGenre to selectedTrackGenre
                 set savedRating to selectedTrackRating
                 set savedComment to selectedTrackComment
@@ -251,7 +257,7 @@ script QTagAppDelegate
                 currentComment's setStringValue_(selectedTrackComment)
             end if
             
-            -- Grab the delimiter values
+            -- Grab the delimiter values from the user interface
             set genreSd to genreStartDelimiter's stringValue as text
             set genreEd to genreEndDelimiter's stringValue as text
             set categorySd to categoryStartDelimiter's stringValue as text
@@ -339,7 +345,7 @@ script QTagAppDelegate
                 set nPc to nPc & attributeSd & (item 18 of attributeList) & attributeEd & ","
             end if
            
-            -- Trim off any trailing ,
+            -- Trim off any trailing commas
             if nPc is not "" then
                 if (the last character of nPc is ",") then set nPc to text 1 thru ((length of nPc) - 1) of nPc as text
             end if
@@ -364,7 +370,7 @@ script QTagAppDelegate
     end idleLoop_
 
     --
-    -- Refresh the "new" tag selectors such that they reflect the tags in the currently playing track.
+    -- Refresh the "new" tag selectors such that they reflect the tags in the currently playing track
     --
     on refreshNewTagSelectors()
         try
@@ -377,7 +383,7 @@ script QTagAppDelegate
                     copy rating of current track to selectedTrackRating
                     copy comment of current track to selectedTrackComment
                 end if
-        end tell
+            end tell
         end try
         
         -- Refresh the genre combo box
@@ -388,7 +394,7 @@ script QTagAppDelegate
             end if
         end repeat
         
-        -- iTunes uses a rating scale up to 100, so we need to divide by 20 to have 5 star slots.
+        -- iTunes uses a rating scale up to 100, so we need to divide by 20 to have 5 star slots
         ratingSelector's setDoubleValue_(selectedTrackRating / 20)
         
         categoryOne's setIntegerValue_(0)
@@ -498,14 +504,16 @@ script QTagAppDelegate
     end refreshNewTagSelectors
 
     --
-    -- Sets up the interface based on our genre, category and attribute lists
+    -- Set up the interface based on our genre, category and attribute lists, which
+    -- come from the array controllers used in the user preferences.
     --
     on setupInterface()
+        log "Setting up the user interface"
         -- Set up the genres
         genreComboBox's removeAllItems()
         genreComboBox's addItemsWithObjectValues_(genreList)
         
-         -- Setup the categories
+        -- Set up the categories
         categoryOne's setTransparent_(1)
         categoryOne's setEnabled_(0)
         categoryTwo's setTransparent_(1)
@@ -559,7 +567,7 @@ script QTagAppDelegate
             end if
         end repeat
         
-        -- Setup the attributes
+        -- Set up the attributes
         attributeOne's setTransparent_(1)
         attributeOne's setEnabled_(0)
         attributeTwo's setTransparent_(1)
@@ -675,10 +683,10 @@ script QTagAppDelegate
     end setupInterface
 
     --
-    -- Apply button clicked, update track tags in iTunes.
+    -- Apply button clicked, update track tags in iTunes
     --
     on applyChanges_(sender)
-        log "User applied changes"
+        log "Applying changes for track: " & savedName
         
         -- Grab the delimiter values
         set genreSd to genreStartDelimiter's stringValue as text
@@ -691,7 +699,7 @@ script QTagAppDelegate
                    set genre of current track to genreSd & newGenre & genreEd
                 end if
             
-                -- Multiply rating by 20 to get it in a scale of 1-100 for itunes
+                -- Multiply rating by 20 to get it in a scale of 1-100 for iTunes
                 set rating of current track to ratingSelector's doubleValue() * 20
                 
                 set newComment to (commentPreview's stringValue as text)
@@ -703,12 +711,12 @@ script QTagAppDelegate
     end applyChanges
 
     --
-    -- Revert button clicked, revert to original tag values.
+    -- Revert button clicked, revert to original tag values
     --
     on revertChanges_(sender)
-        set opt to (display alert "Revert Changes?" message "Revert tags to original values?" buttons {"Cancel", "Revert"} default button 1 as warning giving up after 30)
+        set opt to (display alert "Revert Changes?" message "Revert track tags to the original values?" buttons {"Cancel", "Revert"} default button 1 as warning giving up after 30)
         if button returned of opt is "Revert" then
-            log "Reverting changes"
+            log "Reverting changes for track: " & savedName
             try
                 tell application "iTunes"
                     set genre of current track to savedGenre
@@ -729,6 +737,7 @@ script QTagAppDelegate
     on canAddCategory_(sender)
         set newCategories to (categoryArrayController's arrangedObjects()) as list
         if count of newCategories is greater than maxCategories then
+            log "Cannot add any more categories"
             return 0
         end if
         
@@ -741,6 +750,7 @@ script QTagAppDelegate
     on canAddAttribute_(sender)
         set newAttributes to (attributeArrayController's arrangedObjects()) as list
         if count of newAttributes is greater than maxAttributes then
+            log "Cannot add any  more attributes"
             return 0
         end if
 
@@ -751,8 +761,7 @@ script QTagAppDelegate
     -- Apply preferences button clicked, update the interface
     --
     on applyPreferences_(sender)
-        log "Applying preferences"
-        
+        log "Applying user preferences"
         
         set newGenres to (genreArrayController's arrangedObjects()) as list
         if count of newGenres is not 0 then
@@ -793,6 +802,8 @@ script QTagAppDelegate
             end try
         end repeat
         
+        -- Finally refresh our interface with the new values
+        log "Refreshing user interface with new preferences"
         setupInterface()
     end applyPreferences
 
@@ -800,9 +811,10 @@ script QTagAppDelegate
     -- Get a list of unique genres, for importing to the genre list
     --
     on importGenres_(sender)
-        set opt to (display alert "Import genres from iTunes?" message "Import all existing genres found in existing tracks in iTunes? \nThis may take a while."  buttons {"Cancel", "Import"} default button 1 as warning giving up after 30)
+        set opt to (display alert "Import genres from iTunes?" message "Import all existing genres found in existing tracks in iTunes? \n\nThis may take up to several minutes depending on the size of your collection."  buttons {"Cancel", "Import"} default button 1 as warning giving up after 30)
         
         if button returned of opt is "import" then
+            log "Importing genre list from iTunes"
             try
                 tell application "iTunes"
                     set len to count of tracks
@@ -813,7 +825,7 @@ script QTagAppDelegate
                     end repeat 
                 end tell
             end try
-            log "Imported Genre List: " & importGenrelist
+            log "Imported genre list: " & importGenrelist
             set tempList to {}
             repeat with i from 1 to count of importGenrelist
                 set end of tempList to {genre:item i of importGenrelist}
@@ -825,4 +837,4 @@ script QTagAppDelegate
 
 end script
 
--- End of script
+-- End of application
