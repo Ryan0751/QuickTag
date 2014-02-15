@@ -718,18 +718,18 @@
                                             <rect key="frame" x="17" y="46" width="341" height="439"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <clipView key="contentView" placeholderIntrinsicWidth="339" placeholderIntrinsicHeight="437" id="rK4-aq-HY2">
-                                                <rect key="frame" x="1" y="1" width="339" height="437"/>
+                                                <rect key="frame" x="1" y="17" width="339" height="421"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" id="cqk-89-nIE">
-                                                        <rect key="frame" x="0.0" y="0.0" width="339" height="437"/>
+                                                    <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" headerView="OVv-tm-m3z" id="cqk-89-nIE">
+                                                        <rect key="frame" x="0.0" y="0.0" width="339" height="421"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <size key="intercellSpacing" width="3" height="2"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                         <tableColumns>
                                                             <tableColumn width="336" minWidth="40" maxWidth="1000" id="oNc-R4-yyO">
-                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Name">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
@@ -739,6 +739,7 @@
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
+                                                                <sortDescriptor key="sortDescriptorPrototype" selector="caseInsensitiveCompare:" sortKey="genre"/>
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                 <connections>
                                                                     <binding destination="sn0-4H-uRT" name="value" keyPath="arrangedObjects.genre" id="O2U-Mc-66J">
@@ -761,6 +762,10 @@
                                                 <rect key="frame" x="-14" y="-7" width="15" height="0.0"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
+                                            <tableHeaderView key="headerView" id="OVv-tm-m3z">
+                                                <rect key="frame" x="0.0" y="0.0" width="339" height="17"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                            </tableHeaderView>
                                         </scrollView>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dcR-LS-evg">
                                             <rect key="frame" x="11" y="10" width="82" height="32"/>
@@ -824,18 +829,18 @@
                                             <rect key="frame" x="17" y="46" width="341" height="439"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <clipView key="contentView" placeholderIntrinsicWidth="339" placeholderIntrinsicHeight="437" id="wV6-sl-HPZ">
-                                                <rect key="frame" x="1" y="1" width="339" height="437"/>
+                                                <rect key="frame" x="1" y="17" width="339" height="421"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" id="A1a-Nh-vUt">
-                                                        <rect key="frame" x="0.0" y="0.0" width="339" height="437"/>
+                                                    <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" headerView="2t0-D8-gUv" id="A1a-Nh-vUt">
+                                                        <rect key="frame" x="0.0" y="0.0" width="339" height="421"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <size key="intercellSpacing" width="3" height="2"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                         <tableColumns>
                                                             <tableColumn width="336" minWidth="40" maxWidth="1000" id="lAP-bj-Ynz">
-                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Name">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
@@ -845,6 +850,7 @@
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
+                                                                <sortDescriptor key="sortDescriptorPrototype" selector="caseInsensitiveCompare:" sortKey="category"/>
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                 <connections>
                                                                     <binding destination="A0Z-Ix-twt" name="value" keyPath="arrangedObjects.category" id="q4m-ET-VLO">
@@ -867,6 +873,10 @@
                                                 <rect key="frame" x="-14" y="-7" width="15" height="0.0"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
+                                            <tableHeaderView key="headerView" id="2t0-D8-gUv">
+                                                <rect key="frame" x="0.0" y="0.0" width="339" height="17"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                            </tableHeaderView>
                                         </scrollView>
                                         <button verticalHuggingPriority="750" placeholderIntrinsicWidth="70" placeholderIntrinsicHeight="21" translatesAutoresizingMaskIntoConstraints="NO" id="1S7-ax-Cei">
                                             <rect key="frame" x="11" y="10" width="82" height="32"/>
@@ -919,18 +929,18 @@
                                             <rect key="frame" x="17" y="46" width="341" height="439"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <clipView key="contentView" placeholderIntrinsicWidth="339" placeholderIntrinsicHeight="437" id="xng-eU-Ot3">
-                                                <rect key="frame" x="1" y="1" width="339" height="437"/>
+                                                <rect key="frame" x="1" y="17" width="339" height="421"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" id="15p-p1-9JF">
-                                                        <rect key="frame" x="0.0" y="0.0" width="339" height="437"/>
+                                                    <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" headerView="xFP-3o-DAC" id="15p-p1-9JF">
+                                                        <rect key="frame" x="0.0" y="0.0" width="339" height="421"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <size key="intercellSpacing" width="3" height="2"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                         <tableColumns>
                                                             <tableColumn width="336" minWidth="40" maxWidth="1000" id="upq-RW-tyk">
-                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Name">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
@@ -940,6 +950,7 @@
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
+                                                                <sortDescriptor key="sortDescriptorPrototype" selector="caseInsensitiveCompare:" sortKey="attribute"/>
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                 <connections>
                                                                     <binding destination="Ftd-oF-DTb" name="value" keyPath="arrangedObjects.attribute" id="dnS-cv-zK3">
@@ -962,6 +973,10 @@
                                                 <rect key="frame" x="-14" y="-7" width="15" height="0.0"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
+                                            <tableHeaderView key="headerView" id="xFP-3o-DAC">
+                                                <rect key="frame" x="0.0" y="0.0" width="339" height="17"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                            </tableHeaderView>
                                         </scrollView>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7Yp-8X-60S">
                                             <rect key="frame" x="11" y="10" width="82" height="32"/>
@@ -1252,7 +1267,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <box autoresizesSubviews="NO" verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="Iam-cg-2me">
-                                            <rect key="frame" x="9" y="127" width="357" height="4"/>
+                                            <rect key="frame" x="9" y="127" width="357" height="5"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                                             <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1310,8 +1325,14 @@
                 </constraints>
             </view>
         </window>
-        <arrayController id="sn0-4H-uRT" userLabel="Genre Array Controller">
+        <arrayController automaticallyRearrangesObjects="YES" id="sn0-4H-uRT" userLabel="Genre Array Controller">
             <connections>
+                <binding destination="vxo-Jf-P1h" name="sortDescriptors" keyPath="values.genreSortDescriptors" id="gNs-2h-WeY">
+                    <dictionary key="options">
+                        <bool key="NSValidatesImmediately" value="YES"/>
+                        <string key="NSValueTransformerName">NSUnarchiveFromData</string>
+                    </dictionary>
+                </binding>
                 <binding destination="vxo-Jf-P1h" name="contentArray" keyPath="values.genres" id="9PE-XC-5Tn">
                     <dictionary key="options">
                         <bool key="NSHandlesContentAsCompoundValue" value="YES"/>
@@ -1319,8 +1340,14 @@
                 </binding>
             </connections>
         </arrayController>
-        <arrayController id="A0Z-Ix-twt" userLabel="Category Array Controller">
+        <arrayController automaticallyRearrangesObjects="YES" id="A0Z-Ix-twt" userLabel="Category Array Controller">
             <connections>
+                <binding destination="vxo-Jf-P1h" name="sortDescriptors" keyPath="values.categorySortDescriptors" id="zxr-6C-2dm">
+                    <dictionary key="options">
+                        <bool key="NSValidatesImmediately" value="YES"/>
+                        <string key="NSValueTransformerName">NSUnarchiveFromData</string>
+                    </dictionary>
+                </binding>
                 <binding destination="vxo-Jf-P1h" name="contentArray" keyPath="values.categories" id="Wea-v7-WIu">
                     <dictionary key="options">
                         <bool key="NSHandlesContentAsCompoundValue" value="YES"/>
@@ -1328,8 +1355,14 @@
                 </binding>
             </connections>
         </arrayController>
-        <arrayController id="Ftd-oF-DTb" userLabel="Attribute Array Controller">
+        <arrayController automaticallyRearrangesObjects="YES" id="Ftd-oF-DTb" userLabel="Attribute Array Controller">
             <connections>
+                <binding destination="vxo-Jf-P1h" name="sortDescriptors" keyPath="values.attributeSortDescriptors" id="WId-6E-aoV">
+                    <dictionary key="options">
+                        <bool key="NSValidatesImmediately" value="YES"/>
+                        <string key="NSValueTransformerName">NSUnarchiveFromData</string>
+                    </dictionary>
+                </binding>
                 <binding destination="vxo-Jf-P1h" name="contentArray" keyPath="values.attributes" id="Cjf-0F-Fl8">
                     <dictionary key="options">
                         <bool key="NSHandlesContentAsCompoundValue" value="YES"/>
