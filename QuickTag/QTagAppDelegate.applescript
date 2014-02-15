@@ -65,10 +65,10 @@ script QTagAppDelegate
     property savedRating : missing value
     property savedComment : missing value
     
-    -- Some defaults
-    property genreList : {"Genre 1", "Genre 2", "Genre 3"}
-    property categoryList : {"Category 1", "Category 2", "Category 3"}
-    property attributeList : {"Attribute 1", "Attribute 2", "Attribute 3"}
+    -- The lists of genres, categories and attributes.
+    property genreList : missing value
+    property categoryList : missing value
+    property attributeList : missing value
     
     -- Configureable delimiters
     property genreStartDelimiter : missing value
@@ -110,7 +110,11 @@ script QTagAppDelegate
         -- Set up the standard user defaults
         tell current application's NSUserDefaults to set defaults to standardUserDefaults()
         
-        tell defaults to registerDefaults_({tagDestination:"Overwrite existing comments", genreStartDelim:"(", genreEndDelim:")", ratingStartDelim:"<", ratingEndDelim:">", categoryStartDelim:"{", categoryEndDelim:"}", attributeStartDelim:"[", attributeEndDelim:"]", customTagline:"Tagged with QuickTag"})
+        set genreDefaults to {{genre:"Genre 1"},{genre:"Genre 2"}, {genre:"Genre 3"}}
+        set categoryDefaults to {{category:"Category 1"},{category:"Category 2"}, {category:"Category 3"}}
+        set attributeDefaults to {{attribute:"Attribute 1"},{attribute:"Attribute 2"}, {attribute:"Attribute 3"}}
+        
+        tell defaults to registerDefaults_({tagDestination:"Overwrite existing comments", genreStartDelim:"(", genreEndDelim:")", ratingStartDelim:"<", ratingEndDelim:">", categoryStartDelim:"{", categoryEndDelim:"}", attributeStartDelim:"[", attributeEndDelim:"]", customTagline:"Tagged with QuickTag", genres:genreDefaults, categories:categoryDefaults, attributes:attributeDefaults})
         
         -- Apply preferences will grab the current lists and refresh the interface.
         applyPreferences_(me)
@@ -178,7 +182,7 @@ script QTagAppDelegate
        end if
        
        if my isFullScreen() then
-           log "iTUNES IS IN FULL SCREEN MODE"
+           log "iTunes is in full screen mode"
            delay 0.5
            set opt to (display alert "iTunes is in full screen mode" message "This applet's interface cannot be displayed with iTunes while in full screen mode.
            
