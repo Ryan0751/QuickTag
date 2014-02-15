@@ -13,6 +13,10 @@ script QTagAppDelegate
     -- User default
     property defaults : missing value
     
+    -- Max values
+    property maxCategories : 8
+    property maxAttributes : 18
+    
     -- Interface outlets for existing values.
     property currentTrack : missing value
     property currentGenre : missing value
@@ -719,6 +723,11 @@ script QTagAppDelegate
     -- Can we add a new category callback
     --
     on canAddCategory_(sender)
+        set newCategories to (categoryArrayController's arrangedObjects()) as list
+        if count of newCategories is greater than maxCategories then
+            return 0
+        end if
+        
         return 1
     end canAddCategory
 
@@ -726,6 +735,11 @@ script QTagAppDelegate
     -- Can we add a new attribute callback
     --
     on canAddAttribute_(sender)
+        set newAttributes to (attributeArrayController's arrangedObjects()) as list
+        if count of newAttributes is greater than maxAttributes then
+            return 0
+        end if
+
         return 1
     end canAddAttribute
 
@@ -748,8 +762,8 @@ script QTagAppDelegate
         end repeat
                 
         set newCategories to (categoryArrayController's arrangedObjects()) as list
-        if count of newCategories is greater than 8 then
-            display alert "QuickTag only supports up to 8 categories."
+        if count of newCategories is greater than maxCategories then
+            display alert "QuickTag only supports up to " & maxCategories & " categories.\n\nOnly the first " & maxCategories & " will be displayed."
         end if
         if count of newCategories is not 0 then
             set categoryList to {}
@@ -762,8 +776,8 @@ script QTagAppDelegate
         end repeat
         
         set newAttributes to (attributeArrayController's arrangedObjects()) as list
-        if count of newAttributes is greater than 18 then
-            display alert "QuickTag only supports up to 18 attributes."
+        if count of newAttributes is greater than maxAttributes then
+            display alert "QuickTag only supports up to " & maxAttributes & " attributes.\n\nOnly the first " & maxAttributes & " will be displayed."
         end if
         if count of newAttributes is not 0 then
             set attributeList to {}

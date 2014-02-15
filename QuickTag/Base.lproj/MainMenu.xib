@@ -1342,15 +1342,15 @@
         </arrayController>
         <arrayController automaticallyRearrangesObjects="YES" id="A0Z-Ix-twt" userLabel="Category Array Controller">
             <connections>
+                <binding destination="vxo-Jf-P1h" name="contentArray" keyPath="values.categories" id="Wea-v7-WIu">
+                    <dictionary key="options">
+                        <bool key="NSHandlesContentAsCompoundValue" value="YES"/>
+                    </dictionary>
+                </binding>
                 <binding destination="vxo-Jf-P1h" name="sortDescriptors" keyPath="values.categorySortDescriptors" id="zxr-6C-2dm">
                     <dictionary key="options">
                         <bool key="NSValidatesImmediately" value="YES"/>
                         <string key="NSValueTransformerName">NSUnarchiveFromData</string>
-                    </dictionary>
-                </binding>
-                <binding destination="vxo-Jf-P1h" name="contentArray" keyPath="values.categories" id="Wea-v7-WIu">
-                    <dictionary key="options">
-                        <bool key="NSHandlesContentAsCompoundValue" value="YES"/>
                     </dictionary>
                 </binding>
             </connections>
