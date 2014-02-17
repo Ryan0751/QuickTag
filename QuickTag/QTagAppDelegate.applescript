@@ -386,9 +386,19 @@ script QTagAppDelegate
             end tell
         end try
         
+        -- Grab the delimiter values
+        set genreSd to genreStartDelimiter's stringValue as text
+        set genreEd to genreEndDelimiter's stringValue as text
+        set categorySd to categoryStartDelimiter's stringValue as text
+        set categoryEd to categoryEndDelimiter's stringValue as text
+        set attributeSd to attributeStartDelimiter's stringValue as text
+        set attributeEd to attributeEndDelimiter's stringValue as text
+        set ratingSd to ratingStartDelimiter's stringValue as text
+        set ratingEd to ratingEndDelimiter's stringValue as text
+        
         -- Refresh the genre combo box
         repeat with theGenre in genreList
-            if selectedTrackGenre contains theGenre then
+            if (selectedTrackGenre is equal to theGenre as string) or (selectedTrackGenre is equal to (genreSd & theGenre & genreEd)) then
                 genreComboBox's setStringValue_(theGenre)
                 exit repeat
             end if
@@ -405,16 +415,6 @@ script QTagAppDelegate
         categorySix's setIntegerValue_(0)
         categorySeven's setIntegerValue_(0)
         categoryEight's setIntegerValue_(0)
-        
-        -- Grab the delimiter values
-        set genreSd to genreStartDelimiter's stringValue as text
-        set genreEd to genreEndDelimiter's stringValue as text
-        set categorySd to categoryStartDelimiter's stringValue as text
-        set categoryEd to categoryEndDelimiter's stringValue as text
-        set attributeSd to attributeStartDelimiter's stringValue as text
-        set attributeEd to attributeEndDelimiter's stringValue as text
-        set ratingSd to ratingStartDelimiter's stringValue as text
-        set ratingEd to ratingEndDelimiter's stringValue as text
         
         repeat with theCategoryIndex from 1 to count of the categoryList
             if selectedTrackComment contains (categorySd & (item theCategoryIndex of categoryList) & categoryEd) then
