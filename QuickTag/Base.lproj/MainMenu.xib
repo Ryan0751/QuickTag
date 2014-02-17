@@ -340,10 +340,10 @@
                                     </textFieldCell>
                                 </textField>
                                 <matrix verticalHuggingPriority="750" fixedFrame="YES" mode="track" allowsEmptySelection="NO" autorecalculatesCellSize="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xHE-N4-XVR">
-                                    <rect key="frame" x="101" y="165" width="284" height="118"/>
+                                    <rect key="frame" x="101" y="165" width="455" height="118"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                    <size key="cellSize" width="86" height="18"/>
+                                    <size key="cellSize" width="149" height="18"/>
                                     <size key="intercellSpacing" width="4" height="2"/>
                                     <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" inset="2" id="IOU-7o-TU1">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -627,7 +627,7 @@
                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P5y-pc-R8R">
                         <rect key="frame" x="13" y="723" width="85" height="72"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="QuickTag" id="s4Y-ve-aJq"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="QuickTag Logo V2 Full Size" id="s4Y-ve-aJq"/>
                     </imageView>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SW8-HN-8HU">
                         <rect key="frame" x="104" y="716" width="479" height="68"/>
@@ -1375,6 +1375,6 @@
     <resources>
         <image name="NSAddTemplate" width="8" height="8"/>
         <image name="NSRemoveTemplate" width="8" height="8"/>
-        <image name="QuickTag" width="512" height="512"/>
+        <image name="QuickTag Logo V2 Full Size" width="245.75999450683594" height="245.75999450683594"/>
     </resources>
 </document>
