@@ -734,9 +734,9 @@ script QTagAppDelegate
     --
     -- Can we add a new category callback
     --
-    on canAddCategory_(sender)
+    on canAddCategory_()
         set newCategories to (categoryArrayController's arrangedObjects()) as list
-        if count of newCategories is greater than maxCategories then
+        if count of newCategories is greater than or equal to maxCategories then
             log "Cannot add any more categories"
             return 0
         end if
@@ -747,10 +747,10 @@ script QTagAppDelegate
     --
     -- Can we add a new attribute callback
     --
-    on canAddAttribute_(sender)
+    on canAddAttribute_()
         set newAttributes to (attributeArrayController's arrangedObjects()) as list
-        if count of newAttributes is greater than maxAttributes then
-            log "Cannot add any  more attributes"
+        if count of newAttributes is greater than or equal to maxAttributes then
+            log "Cannot add any more attributes"
             return 0
         end if
 
