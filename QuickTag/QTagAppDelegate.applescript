@@ -3,7 +3,7 @@
 --  QuickTag
 --
 --  Created by Ryan Ruel on 12/14/13.
---  Copyright (c) 2013 Ryan Ruel. All rights reserved.
+--  Copyright (c) 2014 Ryan Ruel. All rights reserved.
 --
 
 script QTagAppDelegate
@@ -146,10 +146,11 @@ script QTagAppDelegate
     --
     on itunesIsNotAccesible()
         try
-            with timeout of 1 second
-            tell application id "com.apple.iTunes" to get name of library playlist 1
-        end timeout
+            with timeout of 10 seconds
+                tell application id "com.apple.iTunes" to get name of library playlist 1
+            end timeout
         on error
+            log ("ERROR: itunesIsNotAccesible() - could not get playlist name.")
             return true
         end try
         return false
@@ -166,7 +167,8 @@ script QTagAppDelegate
                 end tell
             end tell
             on error
-            return false
+                log ("iTunes is not in full-screen mode")
+                return false
         end try
     end isFullScreen
 
@@ -222,6 +224,8 @@ script QTagAppDelegate
                     set selectedTrackName to ""
                 end if
             end tell
+        on error errorMessage number errorNumber
+            log ("ERROR: idleLoop_() get selected track - " & errorMessage & ", errorNumber: " & errorNumber)
         end try
         
         -- We have a track selected
@@ -384,6 +388,8 @@ script QTagAppDelegate
                     copy comment of current track to selectedTrackComment
                 end if
             end tell
+        on error errorMessage number errorNumber
+            log ("ERROR: refreshNewTagSelectors() copy existing track tags " & errorMessage & ", errorNumber: " & errorNumber)
         end try
         
         -- Grab the delimiter values
@@ -497,7 +503,9 @@ script QTagAppDelegate
                     else if theAttributeIndex is 18 then
                         attributeEighteen's setIntegerValue_(1)
                     end if
-            end if
+                end if
+            on error errorMessage number errorNumber
+                log ("ERROR: refreshNewTagSelectors() set attributes - " & errorMessage & ", errorNumber: " & errorNumber)
             end try
         end repeat
 
@@ -707,6 +715,8 @@ script QTagAppDelegate
                     set comment of current track to (commentPreview's stringValue as text)
                 end if
             end tell
+        on error errorMessage number errorNumber
+            log ("ERROR: applyChanges_() - " & errorMessage & ", errorNumber: " & errorNumber)
         end try
     end applyChanges
 
@@ -723,6 +733,8 @@ script QTagAppDelegate
                     set rating of current track to savedRating
                     set comment of current track to savedComment
                 end tell
+            on error errorMessage number errorNumber
+                log ("ERROR: revertChanges_() - " & errorMessage & ", errorNumber: " & errorNumber)
             end try
             refreshNewTagSelectors()
             return true
@@ -771,6 +783,8 @@ script QTagAppDelegate
             try
                 set theName to genre of aGenre
                 set genreList to genreList & theName
+            on error errorMessage number errorNumber
+                log ("ERROR: applyPreferences_() genre - " & errorMessage & ", errorNumber: " & errorNumber)
             end try
         end repeat
                 
@@ -785,6 +799,8 @@ script QTagAppDelegate
             try
                 set theCategory to category of aCategory
                 set categoryList to categoryList & theCategory
+            on error errorMessage number errorNumber
+                log ("ERROR: applyPreferences_() category - " & errorMessage & ", errorNumber: " & errorNumber)
             end try
         end repeat
         
@@ -799,6 +815,8 @@ script QTagAppDelegate
             try
                 set theAttribute to attribute of aAttribute
                 set attributeList to attributeList & theAttribute
+            on error errorMessage number errorNumber
+                log ("ERROR: applyPreferences_() attribute - " & errorMessage & ", errorNumber: " & errorNumber)
             end try
         end repeat
         
@@ -824,6 +842,8 @@ script QTagAppDelegate
                         if gen is not in importGenreList then copy gen to the end of importGenreList
                     end repeat 
                 end tell
+            on error errorMessage number errorNumber
+                log ("ERROR: importGenres_() - " & errorMessage & ", errorNumber: " & errorNumber)
             end try
             log "Imported genre list: " & importGenrelist
             set tempList to {}
