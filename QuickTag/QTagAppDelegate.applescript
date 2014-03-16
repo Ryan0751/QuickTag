@@ -17,16 +17,17 @@ script QTagAppDelegate
     property maxCategories : 8
     property maxAttributes : 18
     
-    -- Interface outlets for existing track tags
+    -- Interface outlets for existing track tag values
     property currentTrack : missing value
     property currentGenre : missing value
     property currentComment : missing value
     
-    -- Interface outlets for the newly selected
+    -- Interface outlets for the newly selected tag values
     property genreComboBox : missing value
     property ratingSelector : missing value
     property commentPreview : missing value
     
+    -- Category checkbox outlets
     property categoryOne : missing value
     property categoryTwo : missing value
     property categoryThree : missing value
@@ -36,6 +37,7 @@ script QTagAppDelegate
     property categorySeven : missing value
     property categoryEight : missing value
     
+    -- Attribute checkbox outlets
     property attributeOne : missing value
     property attributeTwo : missing value
     property attributeThree : missing value
@@ -55,24 +57,29 @@ script QTagAppDelegate
     property attributeSeventeen : missing value
     property attributeEighteen : missing value
     
-    -- Array controllers for the configurable lists in user preferences
+    -- Lists for all the above category and attribute outlets,
+    -- for easy iteration later
+    property categoryCheckboxList : missing value
+    property attributeCheckboxList : missing value
+    
+    -- Array controllers for the configurable lists found in user preferences
     property genreArrayController : missing value
     property categoryArrayController : missing value
     property attributeArrayController : missing value
     
-    -- Save values so that we can revert the user changes if requested
+    -- Saved values, such that we can revert the user changes if requested
     property savedName : missing value
     property savedGenre : missing value
     property savedRating : missing value
     property savedComment : missing value
     
-    -- The lists of genres, categories and attributes, broken out from the arrays
-    -- for easier access.
+    -- The lists of genres, categories and attributes, broken out from the array
+    -- controllers for easier script use.
     property genreList : missing value
     property categoryList : missing value
     property attributeList : missing value
     
-    -- Interface outlets for the delimiters
+    -- Interface outlets for the configurable delimiters
     property genreStartDelimiter : missing value
     property genreEndDelimiter : missing value
     property categoryStartDelimiter : missing value
@@ -82,24 +89,42 @@ script QTagAppDelegate
     property ratingStartDelimiter : missing value
     property ratingEndDelimiter : missing value
     
-    -- Additional tagline outlet
+    property tagSeparator : missing value
+   
+    property genreDelimiterEnabled : missing value
+    property categoryDelimiterEnabled : missing value
+    property attributeDelimiterEnabled : missing value
+    property ratingDelimiterEnabled : missing value
+   
+    -- String values of the configured delimiters for convenience
+    property genreSd : missing value
+    property genreEd : missing value
+    property categorySd : missing value
+    property categoryEd : missing value
+    property attributeSd : missing value
+    property attributeEd : missing value
+    property ratingSd : missing value
+    property ratingEd : missing value
+    property separator : missing value
+    
+    -- Additional tagline interface outlet
     property tagLine : missing value
     
-    -- Where to write track comments (outlets from user prefs)
+    -- Tag destination interface outlets
     property commentsDestination : missing value
     property commentsOverwrite : missing value
     property commentsPrepend : missing value
     property commentsAppend : missing value
     
-    -- Our main idle loop delay period, this should be low enough to make the app appear
-    -- dynamic, but not so low as to impact performance.
+    -- The main idle loop delay period, this should be low enough to make the app appear
+    -- dynamic (since unfortunately we need to poll iTunes), but not so low as to impact performance.
     property idleLoopDelay : .5
     
-    --
-    -- Application launch
-    --
+    (*
+     * Application launch
+     *)
 	on applicationWillFinishLaunching_(aNotification)
-		-- Ensure iTunes is in a proper state for us to run
+		-- Try to access iTunes
         if (accessHook() is false) then
             try
                 tell me to quit
@@ -109,41 +134,47 @@ script QTagAppDelegate
             end try
         end if
         
-        -- Register standard user defaults
+        -- Set standard user defaults
         tell current application's NSUserDefaults to set defaults to standardUserDefaults()
         
+        -- Configure some defaults into the user interface for the first time this application is run
         set genreDefaults to {{genre:"Genre 1"},{genre:"Genre 2"}, {genre:"Genre 3"}}
         set categoryDefaults to {{category:"Category 1"},{category:"Category 2"}, {category:"Category 3"}}
         set attributeDefaults to {{attribute:"Attribute 1"},{attribute:"Attribute 2"}, {attribute:"Attribute 3"}}
         
-        log "Registering user defaults"
-        tell defaults to registerDefaults_({tagDestination:"Overwrite existing comments", genreStartDelim:"(", genreEndDelim:")", ratingStartDelim:"<", ratingEndDelim:">", categoryStartDelim:"{", categoryEndDelim:"}", attributeStartDelim:"[", attributeEndDelim:"]", customTagline:"Tagged with QuickTag", genres:genreDefaults, categories:categoryDefaults, attributes:attributeDefaults})
+        -- Place the interface outlets for all of the checkboxes into these lists so we can easily iterate over them
+        set categoryCheckboxList to {categoryOne, categoryTwo, categoryThree, categoryFour, categoryFive, categorySix, categorySeven, categoryEight}
+        set attributeCheckboxList to {attributeOne, attributeTwo, attributeThree, attributeFour, attributeFive, attributeSix, attributeSeven, attributeEight, attributeNine, attributeTen, attributeEleven, attributeTwelve, attributeThirteen, attributeFourteen, attributeFifteen, attributeSixteen, attributeSeventeen, attributeEighteen}
         
-        -- Apply preferences to grab the current configured values and refresh the interface
+        -- Register user defaults
+        log "Registering user defaults"
+        tell defaults to registerDefaults_({tagDestination:"Overwrite existing comments", genreStartDelim:"(", genreEndDelim:")", genreDelimiterEnabled:"0", ratingStartDelim:"<", ratingEndDelim:">", ratingDelimiterEnabled:"0", categoryStartDelim:"{", categoryEndDelim:"}", categoryDelimiterEnabled:"0", attributeStartDelim:"[", attributeEndDelim:"]", attributeDelimiterEnabled:"0", tagSeparator:",", customTagline:"Tagged with QuickTag", genres:genreDefaults, categories:categoryDefaults, attributes:attributeDefaults})
+        
+        -- Apply preferences, grabbing current configured values and refresh the interface
         applyPreferences_(me)
               
         -- Start the idle loop, which is the event loop for all application events
-    idleLoop_(idleLoopDelay) -- Interval in seconds
+        idleLoop_(idleLoopDelay) -- Interval in seconds
 	end applicationWillFinishLaunching_
 	
-    --
-    -- Application termination
-    --
+    (*
+     * Application termination
+     *)
 	on applicationShouldTerminate_(sender)
         log "Application terminating"
 		return current application's NSTerminateNow
 	end applicationShouldTerminate_
     
-    --
-    -- Check if iTunes is active
-    --
+    (*
+     * Check if iTunes is active
+     *)
     to checkItunesIsActive()
         tell application "iTunes" to return running
     end checkItunesIsActive
 
-    --
-    -- Check if iTunes is accessible
-    --
+    (*
+     * Check if iTunes is accessible
+     *)
     on itunesIsNotAccesible()
         try
             with timeout of 10 seconds
@@ -156,9 +187,9 @@ script QTagAppDelegate
         return false
     end itunesIsNotAccesible
 
-    --
-    -- Check if iTunes is runninng full-screen
-    --
+    (*
+     * Check if iTunes is runninng full-screen
+     *)
     on isFullScreen()
         try
             tell application "System Events"
@@ -172,14 +203,15 @@ script QTagAppDelegate
         end try
     end isFullScreen
 
-    --
-    -- Ensure that iTunes is in a state we can work with
-    --
+    (*
+     * Determine the state of iTunes
+     *)
     on accessHook()
        if my checkItunesIsActive() is false then
            -- Start the application if not running
            tell application "iTunes" to activate
-           return true
+           
+           -- RETURN TRUE HERE IF WE ARENT STARTING ITUNES
        end if
        
        if my itunesIsNotAccesible() is true then
@@ -190,7 +222,7 @@ script QTagAppDelegate
        if my isFullScreen() then
            log "iTunes is in full screen mode"
            delay 0.5
-           set opt to (display alert "iTunes is in full screen mode" message "This applet's interface cannot be displayed with iTunes while in full screen mode.
+           set opt to (display alert "iTunes is in full screen mode" message "QuickTag cannot be displayed with iTunes while in full screen mode.
            
            You can Quit and re-launch this application after taking iTunes out of full screen mode.
            
@@ -204,17 +236,18 @@ script QTagAppDelegate
        return true
    end accessHook
 
-   --
-   -- The main event loop for the application.  We have to poll iTunes as we don't have a
-   -- way to receive asynchronous events from it.
-   --
+   (*
+    * The main event loop for the application.  We have to poll iTunes as we don't have a
+    * way to receive asynchronous events from it.
+    *)
    on idleLoop_(secsDelay)
         set selectedTrackName to ""
         try
             tell application "iTunes"
                 -- Look for a selected track
                 if selection of front browser window is not {} then
-                    log "Grabbing tag values from the iTunes track browser"
+                    log "Getting tag values from the iTunes track browser for the selected track"
+                    
                     -- Copy values to our properties for use later
                     copy name of current track to selectedTrackName
                     copy genre of current track to selectedTrackGenre
@@ -225,7 +258,7 @@ script QTagAppDelegate
                 end if
             end tell
         on error errorMessage number errorNumber
-            log ("ERROR: idleLoop_() get selected track - " & errorMessage & ", errorNumber: " & errorNumber)
+            log ("NOTICE: idleLoop_() get selected track - " & errorMessage & ", errorNumber: " & errorNumber)
         end try
         
         -- We have a track selected
@@ -264,92 +297,51 @@ script QTagAppDelegate
             -- Grab the delimiter values from the user interface
             set genreSd to genreStartDelimiter's stringValue as text
             set genreEd to genreEndDelimiter's stringValue as text
+            if (genreDelimiterEnabled's state as integer) = 0 then
+                set genreSd to ""
+                set genreEd to ""
+            end if
             set categorySd to categoryStartDelimiter's stringValue as text
             set categoryEd to categoryEndDelimiter's stringValue as text
+            if (categoryDelimiterEnabled's state as integer) = 0 then
+                set categorySd to ""
+                set categoryEd to ""
+            end if
             set attributeSd to attributeStartDelimiter's stringValue as text
             set attributeEd to attributeEndDelimiter's stringValue as text
+            if (attributeDelimiterEnabled's state as integer) = 0 then
+                set attributeSd to ""
+                set attributeEd to ""
+            end if
             set ratingSd to ratingStartDelimiter's stringValue as text
             set ratingEd to ratingEndDelimiter's stringValue as text
+            if (ratingDelimiterEnabled's state as integer) = 0 then
+                set ratingSd to ""
+                set ratingEd to ""
+            end if
+            
+            set separator to tagSeparator's stringValue as text
             
             -- Repopulate the comment preview, as this value is used in the final apply
             set nPc to ""
             
             set nPc to nPc & ratingSd & "Rating " & ratingSelector's integerValue() & ratingEd & ","
             
-            if (categoryOne's integerValue) then
-                set nPc to nPc & categorySd & (item 1 of categoryList) & categoryEd & ","
-            else if (categoryTwo's integerValue) then
-                set nPc to nPc & categorySd & (item 2 of categoryList) & categoryEd & ","
-            else if (categoryThree's integerValue) then
-                set nPc to nPc & categorySd & (item 3 of categoryList) & categoryEd & ","
-            else if (categoryFour's integerValue) then
-                set nPc to nPc & categorySd & (item 4 of categoryList) & categoryEd & ","
-            else if (categoryFive's integerValue) then
-                set nPc to nPc & categorySd & (item 5 of categoryList) & categoryEd & ","
-            else if (categorySix's integerValue) then
-                set nPc to nPc & categorySd & (item 6 of categoryList) & categoryEd & ","
-            else if (categorySeven's integerValue) then
-                set nPc to nPc & categorySd & (item 7 of categoryList) & categoryEd & ","
-            else if (categoryEight's integerValue) then
-                set nPc to nPc & categorySd & (item 8 of categoryList) & categoryEd & ","
-            end if
+            repeat with catCount from 1 to maxCategories
+                set aCategory to item catCount of categoryCheckboxList
+                if (aCategory's integerValue) then
+                    set nPc to nPc & categorySd & (item catCount of categoryList) & categoryEd & ","
+                end if
+            end repeat
             
-            if (attributeOne's integerValue) then
-                set nPc to nPc & attributeSd & (item 1 of attributeList) & attributeEd & ","
-            end if
-            if (attributeTwo's integerValue) then
-                set nPc to nPc & attributeSd & (item 2 of attributeList) & attributeEd & ","
-            end if
-            if (attributeThree's integerValue) then
-                set nPc to nPc & attributeSd & (item 3 of attributeList) & attributeEd & ","
-            end if
-            if (attributeFour's integerValue) then
-                set nPc to nPc & attributeSd & (item 4 of attributeList) & attributeEd & ","
-            end if
-            if (attributeFive's integerValue) then
-                set nPc to nPc & attributeSd & (item 5 of attributeList) & attributeEd & ","
-            end if
-            if (attributeSix's integerValue) then
-                set nPc to nPc & attributeSd & (item 6 of attributeList) & attributeEd & ","
-            end if
-            if (attributeSeven's integerValue) then
-                set nPc to nPc & attributeSd & (item 7 of attributeList) & attributeEd & ","
-            end if
-            if (attributeEight's integerValue) then
-                set nPc to nPc & attributeSd & (item 8 of attributeList) & attributeEd & ","
-            end if
-            if (attributeNine's integerValue) then
-                set nPc to nPc & attributeSd & (item 9 of attributeList) & attributeEd & ","
-            end if
-            if (attributeTen's integerValue) then
-                set nPc to nPc & attributeSd & (item 10 of attributeList) & attributeEd & ","
-            end if
-            if (attributeEleven's integerValue) then
-                set nPc to nPc & attributeSd & (item 11 of attributeList) & attributeEd & ","
-            end if
-            if (attributeTwelve's integerValue) then
-                set nPc to nPc & attributeSd & (item 12 of attributeList) & attributeEd & ","
-            end if
-            if (attributeThirteen's integerValue) then
-                set nPc to nPc & attributeSd & (item 13 of attributeList) & attributeEd & ","
-            end if
-            if (attributeFourteen's integerValue) then
-                set nPc to nPc & attributeSd & (item 14 of attributeList) & attributeEd & ","
-            end if
-            if (attributeFifteen's integerValue) then
-                set nPc to nPc & attributeSd & (item 15 of attributeList) & attributeEd & ","
-            end if
-            if (attributeSixteen's integerValue) then
-                set nPc to nPc & attributeSd & (item 16 of attributeList) & attributeEd & ","
-            end if
-            if (attributeSeventeen's integerValue) then
-                set nPc to nPc & attributeSd & (item 17 of attributeList) & attributeEd & ","
-            end if
-            if (attributeEighteen's integerValue) then
-                set nPc to nPc & attributeSd & (item 18 of attributeList) & attributeEd & ","
-            end if
-           
-            -- Trim off any trailing commas
+            repeat with attCount from 1 to maxAttributes
+                set aAttribute to item attCount of attributeCheckboxList
+                if (aAttribute's integerValue) then
+                    set nPc to nPc & attributeSd & (item attCount of attributeList) & attributeEd & ","
+                end if
+            end repeat
+            
+            -- Trim off any trailing tag separators
             if nPc is not "" then
                 if (the last character of nPc is ",") then set nPc to text 1 thru ((length of nPc) - 1) of nPc as text
             end if
@@ -373,9 +365,9 @@ script QTagAppDelegate
         performSelector_withObject_afterDelay_("idleLoop:", secsDelay, secsDelay)
     end idleLoop_
 
-    --
-    -- Refresh the "new" tag selectors such that they reflect the tags in the currently playing track
-    --
+    (*
+     * Refresh the "new" tag selectors such that they reflect the tags in the currently playing track
+     *)
     on refreshNewTagSelectors()
         try
             tell application "iTunes"
@@ -392,15 +384,6 @@ script QTagAppDelegate
             log ("ERROR: refreshNewTagSelectors() copy existing track tags " & errorMessage & ", errorNumber: " & errorNumber)
         end try
         
-        -- Grab the delimiter values
-        set genreSd to genreStartDelimiter's stringValue as text
-        set genreEd to genreEndDelimiter's stringValue as text
-        set categorySd to categoryStartDelimiter's stringValue as text
-        set categoryEd to categoryEndDelimiter's stringValue as text
-        set attributeSd to attributeStartDelimiter's stringValue as text
-        set attributeEd to attributeEndDelimiter's stringValue as text
-        set ratingSd to ratingStartDelimiter's stringValue as text
-        set ratingEd to ratingEndDelimiter's stringValue as text
         
         -- Refresh the genre combo box
         repeat with theGenre in genreList
@@ -413,95 +396,37 @@ script QTagAppDelegate
         -- iTunes uses a rating scale up to 100, so we need to divide by 20 to have 5 star slots
         ratingSelector's setDoubleValue_(selectedTrackRating / 20)
         
-        categoryOne's setIntegerValue_(0)
-        categoryTwo's setIntegerValue_(0)
-        categoryThree's setIntegerValue_(0)
-        categoryFour's setIntegerValue_(0)
-        categoryFive's setIntegerValue_(0)
-        categorySix's setIntegerValue_(0)
-        categorySeven's setIntegerValue_(0)
-        categoryEight's setIntegerValue_(0)
-        
-        repeat with theCategoryIndex from 1 to count of the categoryList
-            if selectedTrackComment contains (categorySd & (item theCategoryIndex of categoryList) & categoryEd) then
-                if theCategoryIndex is 1 then
-                    categoryOne's setIntegerValue_(1)
-                else if theCategoryIndex is 2 then
-                    categoryTwo's setIntegerValue_(1)
-                else if theCategoryIndex is 3 then
-                    categoryThree's setIntegerValue_(1)
-                else if theCategoryIndex is 4 then
-                    categoryFour's setIntegerValue_(1)
-                else if theCategoryIndex is 5 then
-                    categoryFive's setIntegerValue_(1)
-                else if theCategoryIndex is 6 then
-                    categorySix's setIntegerValue_(1)
-                else if theCategoryIndex is 7 then
-                    categorySeven's setIntegerValue_(1)
-                else if theCategoryIndex is 8 then
-                    categoryEight's setIntegerValue_(8)
-                end if
-            end if
+        -- Set the initial category checkbox states to off
+        repeat with aCategory in categoryCheckboxList
+            aCategory's setIntegerValue_(0)
         end repeat
         
-        attributeOne's setIntegerValue_(0)
-        attributeTwo's setIntegerValue_(0)
-        attributeThree's setIntegerValue_(0)
-        attributeFour's setIntegerValue_(0)
-        attributeFive's setIntegerValue_(0)
-        attributeSix's setIntegerValue_(0)
-        attributeSeven's setIntegerValue_(0)
-        attributeEight's setIntegerValue_(0)
-        attributeNine's setIntegerValue_(0)
-        attributeTen's setIntegerValue_(0)
-        attributeEleven's setIntegerValue_(0)
-        attributeTwelve's setIntegerValue_(0)
-        attributeThirteen's setIntegerValue_(0)
-        attributeFourteen's setIntegerValue_(0)
-        attributeFifteen's setIntegerValue_(0)
-        attributeSixteen's setIntegerValue_(0)
-        attributeSeventeen's setIntegerValue_(0)
-        attributeEighteen's setIntegerValue_(0)
+        -- If the category is configured, enable the check box
+        repeat with theCategoryIndex from 1 to count of the categoryList
+            try
+                if selectedTrackComment contains (categorySd & (item theCategoryIndex of categoryList) & categoryEd) then
+                    if theCategoryIndex is less than or equal to maxCategories then
+                        set aCategory to item theCategoryIndex of categoryCheckboxList
+                        aCategory's setIntegerValue_(1)
+                    end if
+                end if
+            on error errorMessage number errorNumber
+                log ("ERROR: refreshNewTagSelectors() set categories - " & errorMessage & ", errorNumber: " & errorNumber)
+            end try
+        end repeat
         
+        -- Set the initial attribute checkbox states to off
+        repeat with aAttribute in attributeCheckboxList
+            aAttribute's setIntegerValue_(0)
+        end repeat
+        
+        -- If the attribute is configured, enable the check box
         repeat with theAttributeIndex from 1 to count of the attributeList
             try
                 if selectedTrackComment contains (attributeSd & (item theAttributeIndex of attributeList) & attributeEd) then
-                    if theAttributeIndex is 1 then
-                        attributeOne's setIntegerValue_(1)
-                    else if theAttributeIndex is 2 then
-                        attributeTwo's setIntegerValue_(1)
-                    else if theAttributeIndex is 3 then
-                        attributeThree's setIntegerValue_(1)
-                    else if theAttributeIndex is 4 then
-                        attributeFour's setIntegerValue_(1)
-                    else if theAttributeIndex is 5 then
-                        attributeFive's setIntegerValue_(1)
-                    else if theAttributeIndex is 6 then
-                        attributeSix's setIntegerValue_(1)
-                    else if theAttributeIndex is 7 then
-                        attributeSeven's setIntegerValue_(1)
-                    else if theAttributeIndex is 8 then
-                        attributeEight's setIntegerValue_(1)
-                    else if theAttributeIndex is 9 then
-                        attributeNine's setIntegerValue_(1)
-                    else if theAttributeIndex is 10 then
-                        attributeTen's setIntegerValue_(1)
-                    else if theAttributeIndex is 11 then
-                        attributeEleven's setIntegerValue_(1)
-                    else if theAttributeIndex is 12 then
-                        attributeTwelve's setIntegerValue_(1)
-                    else if theAttributeIndex is 13 then
-                        attributeThirteen's setIntegerValue_(1)
-                    else if theAttributeIndex is 14 then
-                        attributeFourteen's setIntegerValue_(1)
-                    else if theAttributeIndex is 15 then
-                        attributeFifteen's setIntegerValue_(1)
-                    else if theAttributeIndex is 16 then
-                        attributeSixteen's setIntegerValue_(1)
-                    else if theAttributeIndex is 17 then
-                        attributeSeventeen's setIntegerValue_(1)
-                    else if theAttributeIndex is 18 then
-                        attributeEighteen's setIntegerValue_(1)
+                    if theAttributeIndex is less than or equal to maxAttributes then
+                        set aAttribute to item theAttributeIndex of attributeCheckboxList
+                        aAttribute's setIntegerValue_(1)
                     end if
                 end if
             on error errorMessage number errorNumber
@@ -511,195 +436,51 @@ script QTagAppDelegate
 
     end refreshNewTagSelectors
 
-    --
-    -- Set up the interface based on our genre, category and attribute lists, which
-    -- come from the array controllers used in the user preferences.
-    --
+    (*
+     * Set up the interface based on the configured user preferences
+     *)
     on setupInterface()
         log "Setting up the user interface"
-        -- Set up the genres
+        -- Set up the pull down of genres
         genreComboBox's removeAllItems()
         genreComboBox's addItemsWithObjectValues_(genreList)
         
-        -- Set up the categories
-        categoryOne's setTransparent_(1)
-        categoryOne's setEnabled_(0)
-        categoryTwo's setTransparent_(1)
-        categoryTwo's setEnabled_(0)
-        categoryThree's setTransparent_(1)
-        categoryThree's setEnabled_(0)
-        categoryFour's setTransparent_(1)
-        categoryFour's setEnabled_(0)
-        categoryFive's setTransparent_(1)
-        categoryFive's setEnabled_(0)
-        categorySix's setTransparent_(1)
-        categorySix's setEnabled_(0)
-        categorySeven's setTransparent_(1)
-        categorySeven's setEnabled_(0)
-        categoryEight's setTransparent_(1)
-        categoryEight's setEnabled_(0)
-        
-        repeat with theCategoryIndex from 1 to count of the categoryList
-            if theCategoryIndex is 1 then
-                categoryOne's setTransparent_(0)
-                categoryOne's setEnabled_(1)
-                categoryOne's setTitle_(item theCategoryIndex of categoryList)
-            else if theCategoryIndex is 2 then
-                categoryTwo's setTransparent_(0)
-                categoryTwo's setEnabled_(1)
-                categoryTwo's setTitle_(item theCategoryIndex of categoryList)
-            else if theCategoryIndex is 3 then
-                categoryThree's setTransparent_(0)
-                categoryThree's setEnabled_(1)
-                categoryThree's setTitle_(item theCategoryIndex of categoryList)
-            else if theCategoryIndex is 4 then
-                categoryFour's setTransparent_(0)
-                categoryFour's setEnabled_(1)
-                categoryFour's setTitle_(item theCategoryIndex of categoryList)
-            else if theCategoryIndex is 5 then
-                categoryFive's setTransparent_(0)
-                categoryFive's setEnabled_(1)
-                categoryFive's setTitle_(item theCategoryIndex of categoryList)
-            else if theCategoryIndex is 6 then
-                categorySix's setTransparent_(0)
-                categorySix's setEnabled_(1)
-                categorySix's setTitle_(item theCategoryIndex of categoryList)
-            else if theCategoryIndex is 7 then
-                categorySeven's setTransparent_(0)
-                categorySeven's setEnabled_(1)
-                categorySeven's setTitle_(item theCategoryIndex of categoryList)
-            else if theCategoryIndex is 8 then
-                categoryEight's setTransparent_(0)
-                categoryEight's setEnabled_(1)
-                categoryEight's setTitle_(item theCategoryIndex of categoryList)
-            end if
+        -- Set up the category checkboxes for those configured
+        -- First, disable them all and then make the ones configured visible
+        repeat with aCategory in categoryCheckboxList
+            aCategory's setTransparent_(1)
+            aCategory's setEnabled_(0)
+        end repeat
+ 
+        repeat with catIndex from 1 to count of the categoryList
+            set aCategory to item catIndex of categoryCheckboxList
+            aCategory's setTransparent_(0)
+            aCategory's setEnabled_(1)
+            aCategory's setTitle_(item catIndex of categoryList)
+        end repeat
+
+        -- Set up the attribute checkboxes for those configured
+        -- First, disable them all and then make the ones configured visible
+        repeat with aAttribute in attributeCheckboxList
+            aAttribute's setTransparent_(1)
+            aAttribute's setEnabled_(0)
         end repeat
         
-        -- Set up the attributes
-        attributeOne's setTransparent_(1)
-        attributeOne's setEnabled_(0)
-        attributeTwo's setTransparent_(1)
-        attributeTwo's setEnabled_(0)
-        attributeThree's setTransparent_(1)
-        attributeThree's setEnabled_(0)
-        attributeFour's setTransparent_(1)
-        attributeFour's setEnabled_(0)
-        attributeFive's setTransparent_(1)
-        attributeFive's setEnabled_(0)
-        attributeSix's setTransparent_(1)
-        attributeSix's setEnabled_(0)
-        attributeSeven's setTransparent_(1)
-        attributeSeven's setEnabled_(0)
-        attributeEight's setTransparent_(1)
-        attributeEight's setEnabled_(0)
-        attributeNine's setTransparent_(1)
-        attributeNine's setEnabled_(0)
-        attributeTen's setTransparent_(1)
-        attributeTen's setEnabled_(0)
-        attributeEleven's setTransparent_(1)
-        attributeEleven's setEnabled_(0)
-        attributeTwelve's setTransparent_(1)
-        attributeTwelve's setEnabled_(0)
-        attributeThirteen's setTransparent_(1)
-        attributeThirteen's setEnabled_(0)
-        attributeFourteen's setTransparent_(1)
-        attributeFourteen's setEnabled_(0)
-        attributeFifteen's setTransparent_(1)
-        attributeFifteen's setEnabled_(0)
-        attributeSixteen's setTransparent_(1)
-        attributeSixteen's setEnabled_(0)
-        attributeSeventeen's setTransparent_(1)
-        attributeSeventeen's setEnabled_(0)
-        attributeEighteen's setTransparent_(1)
-        attributeEighteen's setEnabled_(0)
-        
-        repeat with theAttributeIndex from 1 to count of the attributeList
-            if theAttributeIndex is 1 then
-                attributeOne's setTransparent_(0)
-                attributeOne's setEnabled_(1)
-                attributeOne's setTitle_(item theAttributeIndex of attributeList)
-            else if theAttributeIndex is 2 then
-                attributeTwo's setTransparent_(0)
-                attributeTwo's setEnabled_(1)
-                attributeTwo's setTitle_(item theAttributeIndex of attributeList)
-            else if theAttributeIndex is 3 then
-                attributeThree's setTransparent_(0)
-                attributeThree's setEnabled_(1)
-                attributeThree's setTitle_(item theAttributeIndex of attributeList)
-            else if theAttributeIndex is 4 then
-                attributeFour's setTransparent_(0)
-                attributeFour's setEnabled_(1)
-                attributeFour's setTitle_(item theAttributeIndex of attributeList)
-            else if theAttributeIndex is 5 then
-                attributeFive's setTransparent_(0)
-                attributeFive's setEnabled_(1)
-                attributeFive's setTitle_(item theAttributeIndex of attributeList)
-            else if theAttributeIndex is 6 then
-                attributeSix's setTransparent_(0)
-                attributeSix's setEnabled_(1)
-                attributeSix's setTitle_(item theAttributeIndex of attributeList)
-            else if theAttributeIndex is 7 then
-                attributeSeven's setTransparent_(0)
-                attributeSeven's setEnabled_(1)
-                attributeSeven's setTitle_(item theAttributeIndex of attributeList)
-            else if theAttributeIndex is 8 then
-                attributeEight's setTransparent_(0)
-                attributeEight's setEnabled_(1)
-                attributeEight's setTitle_(item theAttributeIndex of attributeList)
-            else if theAttributeIndex is 9 then
-                attributeNine's setTransparent_(0)
-                attributeNine's setEnabled_(1)
-                attributeNine's setTitle_(item theAttributeIndex of attributeList)
-            else if theAttributeIndex is 10 then
-                attributeTen's setTransparent_(0)
-                attributeTen's setEnabled_(1)
-                attributeTen's setTitle_(item theAttributeIndex of attributeList)
-            else if theAttributeIndex is 11 then
-                attributeEleven's setTransparent_(0)
-                attributeEleven's setEnabled_(1)
-                attributeEleven's setTitle_(item theAttributeIndex of attributeList)
-            else if theAttributeIndex is 12 then
-                attributeTwelve's setTransparent_(0)
-                attributeTwelve's setEnabled_(1)
-                attributeTwelve's setTitle_(item theAttributeIndex of attributeList)
-            else if theAttributeIndex is 13 then
-                attributeThirteen's setTransparent_(0)
-                attributeThirteen's setEnabled_(1)
-                attributeThirteen's setTitle_(item theAttributeIndex of attributeList)
-            else if theAttributeIndex is 14 then
-                attributeFourteen's setTransparent_(0)
-                attributeFourteen's setEnabled_(1)
-                attributeFourteen's setTitle_(item theAttributeIndex of attributeList)
-            else if theAttributeIndex is 15 then
-                attributeFifteen's setTransparent_(0)
-                attributeFifteen's setEnabled_(1)
-                attributeFifteen's setTitle_(item theAttributeIndex of attributeList)
-            else if theAttributeIndex is 16 then
-                attributeSixteen's setTransparent_(0)
-                attributeSixteen's setEnabled_(1)
-                attributeSixteen's setTitle_(item theAttributeIndex of attributeList)
-            else if theAttributeIndex is 17 then
-                attributeSeventeen's setTransparent_(0)
-                attributeSeventeen's setEnabled_(1)
-                attributeSeventeen's setTitle_(item theAttributeIndex of attributeList)
-            else if theAttributeIndex is 18 then
-                attributeEighteen's setTransparent_(0)
-                attributeEighteen's setEnabled_(1)
-                attributeEighteen's setTitle_(item theAttributeIndex of attributeList)
-            end if
+        repeat with attIndex from 1 to count of the attributeList
+            set aAttribute to item attIndex of attributeCheckboxList
+            aAttribute's setTransparent_(0)
+            aAttribute's setEnabled_(1)
+            aAttribute's setTitle_(item attIndex of attributeList)
         end repeat
+
     end setupInterface
 
-    --
-    -- Apply button clicked, update track tags in iTunes
-    --
+    (*
+     * Apply button clicked, update track tags in iTunes
+     *)
     on applyChanges_(sender)
         log "Applying changes for track: " & savedName
-        
-        -- Grab the delimiter values
-        set genreSd to genreStartDelimiter's stringValue as text
-        set genreEd to genreEndDelimiter's stringValue as text
-
+         
         try
             tell application "iTunes"
                 set newGenre to genreComboBox's stringValue as text
@@ -720,9 +501,9 @@ script QTagAppDelegate
         end try
     end applyChanges
 
-    --
-    -- Revert button clicked, revert to original tag values
-    --
+    (*
+     * Revert button clicked, revert to original tag values
+     *)
     on revertChanges_(sender)
         set opt to (display alert "Revert Changes?" message "Revert track tags to the original values?" buttons {"Cancel", "Revert"} default button 1 as warning giving up after 30)
         if button returned of opt is "Revert" then
@@ -743,9 +524,9 @@ script QTagAppDelegate
         end if
     end revertChanges
 
-    --
-    -- Can we add a new category callback
-    --
+    (*
+     * Can we add a new category callback
+     *)
     on canAddCategory_()
         set newCategories to (categoryArrayController's arrangedObjects()) as list
         if count of newCategories is greater than or equal to maxCategories then
@@ -756,9 +537,9 @@ script QTagAppDelegate
         return 1
     end canAddCategory
 
-    --
-    -- Can we add a new attribute callback
-    --
+    (*
+     * Can we add a new attribute callback
+     *)
     on canAddAttribute_()
         set newAttributes to (attributeArrayController's arrangedObjects()) as list
         if count of newAttributes is greater than or equal to maxAttributes then
@@ -769,9 +550,9 @@ script QTagAppDelegate
         return 1
     end canAddAttribute
 
-    --
-    -- Apply preferences button clicked, update the interface
-    --
+    (*
+     * Apply user preferences button clicked, update the interface
+     *)
     on applyPreferences_(sender)
         log "Applying user preferences"
         
@@ -820,14 +601,14 @@ script QTagAppDelegate
             end try
         end repeat
         
-        -- Finally refresh our interface with the new values
+        -- Finally, refresh the interface with the new values
         log "Refreshing user interface with new preferences"
         setupInterface()
     end applyPreferences
 
-    --
-    -- Get a list of unique genres, for importing to the genre list
-    --
+    (*
+     * Get a list of unique genres from iTunes, for importing to the genre list
+     *)
     on importGenres_(sender)
         set opt to (display alert "Import genres from iTunes?" message "Import all existing genres found in existing tracks in iTunes? \n\nThis may take up to several minutes depending on the size of your collection."  buttons {"Cancel", "Import"} default button 1 as warning giving up after 30)
         
