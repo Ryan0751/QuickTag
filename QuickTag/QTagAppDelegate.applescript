@@ -148,7 +148,7 @@ script QTagAppDelegate
         
         -- Register user defaults
         log "Registering user defaults"
-        tell defaults to registerDefaults_({tagDestination:"Overwrite existing comments", genreStartDelim:"(", genreEndDelim:")", genreDelimiterEnabled:"0", ratingStartDelim:"<", ratingEndDelim:">", ratingDelimiterEnabled:"0", categoryStartDelim:"{", categoryEndDelim:"}", categoryDelimiterEnabled:"0", attributeStartDelim:"[", attributeEndDelim:"]", attributeDelimiterEnabled:"0", tagSeparator:",", customTagline:"Tagged with QuickTag", genres:genreDefaults, categories:categoryDefaults, attributes:attributeDefaults})
+        tell defaults to registerDefaults_({tagDestination:"Overwrite existing comments", genreStartDelim:"(", genreEndDelim:")", genreDelimiterEnabled:0, ratingStartDelim:"<", ratingEndDelim:">", ratingDelimiterEnabled:0, categoryStartDelim:"{", categoryEndDelim:"}", categoryDelimiterEnabled:0, attributeStartDelim:"[", attributeEndDelim:"]", attributeDelimiterEnabled:0, tagSeparator:",", customTagline:"Tagged with QuickTag", genres:genreDefaults, categories:categoryDefaults, attributes:attributeDefaults})
         
         -- Apply preferences, grabbing current configured values and refresh the interface
         applyPreferences_(me)
