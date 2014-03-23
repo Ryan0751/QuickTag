@@ -325,27 +325,25 @@ script QTagAppDelegate
             -- Repopulate the comment preview, as this value is used in the final apply
             set nPc to ""
             
-            set nPc to nPc & ratingSd & "Rating " & ratingSelector's integerValue() & ratingEd & ","
+            set nPc to nPc & ratingSd & "Rating " & ratingSelector's integerValue() & ratingEd & separator
             
             repeat with catCount from 1 to maxCategories
                 set aCategory to item catCount of categoryCheckboxList
                 if (aCategory's integerValue) then
-                    set nPc to nPc & categorySd & (item catCount of categoryList) & categoryEd & ","
+                    set nPc to nPc & categorySd & (item catCount of categoryList) & categoryEd & separator
                 end if
             end repeat
             
             repeat with attCount from 1 to maxAttributes
                 set aAttribute to item attCount of attributeCheckboxList
                 if (aAttribute's integerValue) then
-                    set nPc to nPc & attributeSd & (item attCount of attributeList) & attributeEd & ","
+                    set nPc to nPc & attributeSd & (item attCount of attributeList) & attributeEd & separator
                 end if
             end repeat
             
             -- Trim off any trailing tag separators
-            if nPc is not "" then
-                if (the last character of nPc is ",") then set nPc to text 1 thru ((length of nPc) - 1) of nPc as text
-            end if
- 
+            set nPc to trim_line(nPc, separator, 2)
+            
             set additionalTagLine to tagLine's stringValue as text
             if additionalTagLine is not "" then
                 set nPc to nPc & "\n" & additionalTagLine
@@ -635,6 +633,38 @@ script QTagAppDelegate
             
         end if
     end importGenres
+
+    (*
+     * Trims "trim_chars" from "this_text".  Trim indicator specifies where to trim:
+     * 0 - beginning, 1 - end, 2 - both.
+     *)
+    on trim_line(this_text, trim_chars, trim_indicator)
+        -- 0 = beginning, 1 = end, 2 = both
+        set x to the length of the trim_chars
+        -- Trim beginning
+        if the trim_indicator is in {0, 2} then
+            repeat while this_text begins with the trim_chars
+                try
+                    set this_text to characters (x + 1) thru -1 of this_text as string
+                    on error
+                    -- the text contains nothing but the trim characters
+                    return ""
+                end try
+            end repeat
+        end if
+        -- Trim ending
+        if the trim_indicator is in {1, 2} then
+            repeat while this_text ends with the trim_chars
+                try
+                    set this_text to characters 1 thru -(x + 1) of this_text as string
+                    on error
+                    -- the text contains nothing but the trim characters
+                    return ""
+                end try
+            end repeat
+        end if
+        return this_text
+    end trim_line
 
 end script
 
