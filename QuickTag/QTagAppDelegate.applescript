@@ -20,12 +20,13 @@ script QTagAppDelegate
     -- Interface outlets for existing track tag values
     property currentTrack : missing value
     property currentGenre : missing value
-    property currentComment : missing value
+    property currentTaggingFieldLabel : missing value
+    property currentTaggingField : missing value
     
     -- Interface outlets for the newly selected tag values
     property genreComboBox : missing value
     property ratingSelector : missing value
-    property commentPreview : missing value
+    property tagPreview : missing value
     
     -- Category checkbox outlets
     property categoryOne : missing value
@@ -71,7 +72,7 @@ script QTagAppDelegate
     property savedName : missing value
     property savedGenre : missing value
     property savedRating : missing value
-    property savedComment : missing value
+    property savedTaggingField : missing value
     
     -- The lists of genres, categories and attributes, broken out from the array
     -- controllers for easier script use.
@@ -111,10 +112,10 @@ script QTagAppDelegate
     property tagLine : missing value
     
     -- Tag destination interface outlets
-    property commentsDestination : missing value
-    property commentsOverwrite : missing value
-    property commentsPrepend : missing value
-    property commentsAppend : missing value
+    property tagDestFieldPref : missing value
+    property tagDestPrefOverwrie : missing value
+    property tagDestPrefPrepend : missing value
+    property tagDestPrefAppend : missing value
     
     -- The main idle loop delay period, this should be low enough to make the app appear
     -- dynamic (since unfortunately we need to poll iTunes), but not so low as to impact performance.
@@ -141,6 +142,7 @@ script QTagAppDelegate
         set genreDefaults to {{genre:"Genre 1"},{genre:"Genre 2"}, {genre:"Genre 3"}}
         set categoryDefaults to {{category:"Category 1"},{category:"Category 2"}, {category:"Category 3"}}
         set attributeDefaults to {{attribute:"Attribute 1"},{attribute:"Attribute 2"}, {attribute:"Attribute 3"}}
+        set tagDefaults to {"Comments", "Category", "Grouping"}
         
         -- Place the interface outlets for all of the checkboxes into these lists so we can easily iterate over them
         set categoryCheckboxList to {categoryOne, categoryTwo, categoryThree, categoryFour, categoryFive, categorySix, categorySeven, categoryEight}
@@ -148,7 +150,7 @@ script QTagAppDelegate
         
         -- Register user defaults
         log "Registering user defaults"
-        tell defaults to registerDefaults_({tagDestination:"Overwrite existing comments", genreStartDelim:"(", genreEndDelim:")", genreDelimiterEnabled:0, ratingStartDelim:"<", ratingEndDelim:">", ratingDelimiterEnabled:0, categoryStartDelim:"{", categoryEndDelim:"}", categoryDelimiterEnabled:0, attributeStartDelim:"[", attributeEndDelim:"]", attributeDelimiterEnabled:0, tagSeparator:",", customTagline:"Tagged with QuickTag", genres:genreDefaults, categories:categoryDefaults, attributes:attributeDefaults})
+        tell defaults to registerDefaults_({tagFieldSelector:"Comments",tagDestination:"Overwrite existing value", genreStartDelim:"(", genreEndDelim:")", genreDelimiterEnabled:0, ratingStartDelim:"<", ratingEndDelim:">", ratingDelimiterEnabled:0, categoryStartDelim:"{", categoryEndDelim:"}",categoryDelimiterEnabled:0, attributeStartDelim:"[", attributeEndDelim:"]", attributeDelimiterEnabled:0, tagSeparator:",", tagField:tagDefaults, customTagline:"Tagged with QuickTag", genres:genreDefaults, categories:categoryDefaults, attributes:attributeDefaults})
         
         -- Apply preferences, grabbing current configured values and refresh the interface
         applyPreferences_(me)
@@ -246,13 +248,19 @@ script QTagAppDelegate
             tell application "iTunes"
                 -- Look for a selected track
                 if selection of front browser window is not {} then
-                    log "Getting tag values from the iTunes track browser for the selected track"
-                    
                     -- Copy values to our properties for use later
                     copy name of current track to selectedTrackName
                     copy genre of current track to selectedTrackGenre
                     copy rating of current track to selectedTrackRating
-                    copy comment of current track to selectedTrackComment
+                    
+                    if tagDestFieldPref's stringValue() as string contains "Comments" then
+                        copy comment of current track to selectedTrackTaggingField
+                    else if tagDestFieldPref's stringValue() as string contains "Grouping" then
+                        copy grouping of current track to selectedTrackTaggingField
+                    else if tagDestFieldPref's stringValue() as string contains "Category" then
+                        copy category of current track to selectedTrackTaggingField
+                    end if
+                    
                 else
                     set selectedTrackName to ""
                 end if
@@ -266,7 +274,7 @@ script QTagAppDelegate
             -- Grab the tag values currently in the interface
             set displayedTrack to currentTrack's stringValue
             set displayedGenre to currentGenre's stringValue
-            set displayedComment to currentComment's stringValue
+            set displayedTaggingField to currentTaggingField's stringValue
             
             -- Our trigger for handling a track change is when the displayed track name differs
             -- from the track name in iTunes.
@@ -276,7 +284,7 @@ script QTagAppDelegate
                 set savedName to selectedTrackName
                 set savedGenre to selectedTrackGenre
                 set savedRating to selectedTrackRating
-                set savedComment to selectedTrackComment
+                set savedTaggingField to selectedTrackTaggingField
               
                 -- Display the new track name
                 currentTrack's setStringValue_(selectedTrackName)
@@ -290,8 +298,8 @@ script QTagAppDelegate
                 currentGenre's setStringValue_(selectedTrackGenre)
             end if
             
-            if selectedTrackComment is not equal to displayedComment as string then
-                currentComment's setStringValue_(selectedTrackComment)
+            if selectedTrackTaggingField is not equal to displayedTaggingField as string then
+                currentTaggingField's setStringValue_(selectedTrackTaggingField)
             end if
             
             -- Grab the delimiter values from the user interface
@@ -322,7 +330,7 @@ script QTagAppDelegate
             
             set separator to tagSeparator's stringValue as text
             
-            -- Repopulate the comment preview, as this value is used in the final apply
+            -- Repopulate the tag preview, as this value is used in the final apply
             set nPc to ""
             
             set nPc to nPc & ratingSd & "Rating " & ratingSelector's integerValue() & ratingEd & separator
@@ -349,13 +357,13 @@ script QTagAppDelegate
                 set nPc to nPc & "\n" & additionalTagLine
             end if
             
-            if (commentsPrepend's integerValue)
-                set nPc to nPc & "\n" & selectedTrackComment
-            else if (commentsAppend's integerValue)
-                set nPc to selectedTrackComment & "\n" & nPc
+            if (tagDestPrefPrepend's integerValue)
+                set nPc to nPc & "\n" & selectedTrackTaggingField
+            else if (tagDestPrefAppend's integerValue)
+                set nPc to selectedTrackTaggingField & "\n" & nPc
             end if
       
-            commentPreview's setStringValue_(nPc)
+            tagPreview's setStringValue_(nPc)
           
         end if
 
@@ -375,7 +383,15 @@ script QTagAppDelegate
                     copy name of current track to selectedTrackName
                     copy genre of current track to selectedTrackGenre
                     copy rating of current track to selectedTrackRating
-                    copy comment of current track to selectedTrackComment
+    
+                    if tagDestFieldPref's stringValue() as string contains "Comments" then
+                        copy comment of current track to selectedTrackTaggingField
+                        else if tagDestFieldPref's stringValue() as string contains "Grouping" then
+                        copy grouping of current track to selectedTrackTaggingField
+                        else if tagDestFieldPref's stringValue() as string contains "Category" then
+                        copy category of current track to selectedTrackTaggingField
+                    end if
+                    
                 end if
             end tell
         on error errorMessage number errorNumber
@@ -402,7 +418,7 @@ script QTagAppDelegate
         -- If the category is configured, enable the check box
         repeat with theCategoryIndex from 1 to count of the categoryList
             try
-                if selectedTrackComment contains (categorySd & (item theCategoryIndex of categoryList) & categoryEd) then
+                if selectedTrackTaggingField contains (categorySd & (item theCategoryIndex of categoryList) & categoryEd) then
                     if theCategoryIndex is less than or equal to maxCategories then
                         set aCategory to item theCategoryIndex of categoryCheckboxList
                         aCategory's setIntegerValue_(1)
@@ -421,7 +437,7 @@ script QTagAppDelegate
         -- If the attribute is configured, enable the check box
         repeat with theAttributeIndex from 1 to count of the attributeList
             try
-                if selectedTrackComment contains (attributeSd & (item theAttributeIndex of attributeList) & attributeEd) then
+                if selectedTrackTaggingField contains (attributeSd & (item theAttributeIndex of attributeList) & attributeEd) then
                     if theAttributeIndex is less than or equal to maxAttributes then
                         set aAttribute to item theAttributeIndex of attributeCheckboxList
                         aAttribute's setIntegerValue_(1)
@@ -439,6 +455,11 @@ script QTagAppDelegate
      *)
     on setupInterface()
         log "Setting up the user interface"
+        
+        -- Set the current track tagging field label to comments/grouping/etc
+        set label to tagDestFieldPref's stringValue() as string & ":"
+        currentTaggingFieldLabel's setStringValue_(label)
+        
         -- Set up the pull down of genres
         genreComboBox's removeAllItems()
         genreComboBox's addItemsWithObjectValues_(genreList)
@@ -489,9 +510,15 @@ script QTagAppDelegate
                 -- Multiply rating by 20 to get it in a scale of 1-100 for iTunes
                 set rating of current track to ratingSelector's doubleValue() * 20
                 
-                set newComment to (commentPreview's stringValue as text)
-                if newComment is not "" then
-                    set comment of current track to (commentPreview's stringValue as text)
+                set newTags to (tagPreview's stringValue as text)
+                if newTags is not "" then
+                    if tagDestFieldPref's stringValue() as string contains "Comments" then
+                        set comment of current track to (tagPreview's stringValue as text)
+                    else if tagDestFieldPref's stringValue() as string contains "Grouping" then
+                        set grouping of current track to (tagPreview's stringValue as text)
+                    else if tagDestFieldPref's stringValue() as string contains "Category" then
+                        set category of current track to (tagPreview's stringValue as text)
+                    end if
                 end if
             end tell
         on error errorMessage number errorNumber
@@ -510,7 +537,15 @@ script QTagAppDelegate
                 tell application "iTunes"
                     set genre of current track to savedGenre
                     set rating of current track to savedRating
-                    set comment of current track to savedComment
+   
+                    if tagDestFieldPref's stringValue() as string contains "Comments" then
+                        set comment of current track to savedTaggingField
+                        else if tagDestFieldPref's stringValue() as string contains "Grouping" then
+                        set grouping of current track to savedTaggingField
+                        else if tagDestFieldPref's stringValue() as string contains "Category" then
+                        set category of current track to savedTaggingField
+                    end if
+
                 end tell
             on error errorMessage number errorNumber
                 log ("ERROR: revertChanges_() - " & errorMessage & ", errorNumber: " & errorNumber)
