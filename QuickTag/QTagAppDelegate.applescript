@@ -150,7 +150,7 @@ script QTagAppDelegate
         
         -- Register user defaults
         log "Registering user defaults"
-        tell defaults to registerDefaults_({tagFieldSelector:"Comments",tagDestination:"Overwrite existing value", genreStartDelim:"(", genreEndDelim:")", genreDelimiterEnabled:0, ratingStartDelim:"<", ratingEndDelim:">", ratingDelimiterEnabled:0, categoryStartDelim:"{", categoryEndDelim:"}",categoryDelimiterEnabled:0, attributeStartDelim:"[", attributeEndDelim:"]", attributeDelimiterEnabled:0, tagSeparator:",", tagField:tagDefaults, customTagline:"Tagged with QuickTag", genres:genreDefaults, categories:categoryDefaults, attributes:attributeDefaults})
+        tell defaults to registerDefaults_({tagFieldSelector:"Comments",tagDestination:"Overwrite existing value", genreStartDelim:"(", genreEndDelim:")", genreDelimiterEnabled:1, ratingStartDelim:"<", ratingEndDelim:">", ratingDelimiterEnabled:1, categoryStartDelim:"{", categoryEndDelim:"}",categoryDelimiterEnabled:1, attributeStartDelim:"[", attributeEndDelim:"]", attributeDelimiterEnabled:1, tagSeparator:",", tagField:tagDefaults, customTagline:"Tagged with QuickTag", genres:genreDefaults, categories:categoryDefaults, attributes:attributeDefaults})
         
         -- Apply preferences, grabbing current configured values and refresh the interface
         applyPreferences_(me)
@@ -211,10 +211,10 @@ script QTagAppDelegate
     on accessHook()
        if my checkItunesIsActive() is false then
            -- Start the application if not running
+           log "Activating iTunes"
            tell application "iTunes" to activate
-           
-           -- RETURN TRUE HERE IF WE ARENT STARTING ITUNES
-       end if
+           return true
+        end if
        
        if my itunesIsNotAccesible() is true then
            set opt to (display dialog "Please close any utility windows that may be open in iTunes" buttons {"OK"} default button 1 with title "Cannot proceed..." with icon 0 giving up after 30)
