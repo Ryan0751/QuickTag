@@ -18,6 +18,6 @@ QuickTag is written in AppleScriptObjC using OSX 10.9 (Mavericks) and XCode 5. S
 ### Binary Downloads, Documentation, etc.
 The binary version of QuickTag can be downloaded at the QuickTag homepage:
 
-http://www.ryanruel.com/quicktag/
+http://www.quicktagapp.com
 
 QuickTag includes application help, and additional help can be found at the Wiki page here on GitHub.
