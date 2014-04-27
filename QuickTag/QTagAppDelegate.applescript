@@ -156,7 +156,7 @@ script QTagAppDelegate
         
         -- Register user defaults
         log "Registering user defaults"
-        tell defaults to registerDefaults_({tagFieldSelector:"Comments",tagDestination:"Overwrite existing value", genreStartDelim:"(", genreEndDelim:")", genreDelimiterEnabled:1, ratingStartDelim:"<", ratingEndDelim:">", ratingDelimiterEnabled:1, categoryStartDelim:"{", categoryEndDelim:"}",categoryDelimiterEnabled:1, attributeStartDelim:"[", attributeEndDelim:"]", attributeDelimiterEnabled:1, tagSeparator:",", tagField:tagDefaults, customTagline:"Tagged with QuickTag", genres:genreDefaults, categories:categoryDefaults, attributes:attributeDefaults, initialPlaylist:""})
+        tell defaults to registerDefaults_({tagFieldSelector:"Comments",tagDestination:"Overwrite existing value", genreStartDelim:"(", genreEndDelim:")", genreDelimEnabled:1, ratingStartDelim:"<", ratingEndDelim:">", ratingDelimEnabled:1, categoryStartDelim:"{", categoryEndDelim:"}",categoryDelimEnabled:1, attributeStartDelim:"[", attributeEndDelim:"]", attributeDelimEnabled:1, tagSeparator:",", tagField:tagDefaults, customTagline:"Tagged with QuickTag", genres:genreDefaults, categories:categoryDefaults, attributes:attributeDefaults, initialPlaylist:""})
         
         -- Get the list of playlists, once on startup.  User can refresh the list later from the preferences window.
         importPlaylists_(me)

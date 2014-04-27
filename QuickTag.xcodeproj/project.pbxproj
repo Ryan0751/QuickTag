@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D1205AD618B2512D00BED6DD /* QuickTag Logo V2 Full Size.png in Resources */ = {isa = PBXBuildFile; fileRef = D1205AD518B2512D00BED6DD /* QuickTag Logo V2 Full Size.png */; };
-		D183A51718AEAF2E00E70C10 /* QuickTagHelp in Resources */ = {isa = PBXBuildFile; fileRef = D183A51618AEAF2E00E70C10 /* QuickTagHelp */; };
+		D1D4374A190D798D00E256EF /* QuickTagHelp in Resources */ = {isa = PBXBuildFile; fileRef = D1D43749190D798D00E256EF /* QuickTagHelp */; };
 		D1FAAE1A185CA05F0063BF6B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1FAAE19185CA05F0063BF6B /* Cocoa.framework */; };
 		D1FAAE1C185CA05F0063BF6B /* AppleScriptObjC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1FAAE1B185CA05F0063BF6B /* AppleScriptObjC.framework */; };
 		D1FAAE26185CA05F0063BF6B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D1FAAE24185CA05F0063BF6B /* InfoPlist.strings */; };
@@ -22,7 +22,7 @@
 /* Begin PBXFileReference section */
 		D1205AD518B2512D00BED6DD /* QuickTag Logo V2 Full Size.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "QuickTag Logo V2 Full Size.png"; sourceTree = "<group>"; };
 		D13AE2F4186863D500C23F2C /* QuickTag.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = QuickTag.entitlements; sourceTree = "<group>"; };
-		D183A51618AEAF2E00E70C10 /* QuickTagHelp */ = {isa = PBXFileReference; lastKnownFileType = folder; path = QuickTagHelp; sourceTree = "<group>"; };
+		D1D43749190D798D00E256EF /* QuickTagHelp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = QuickTagHelp; path = QuickTag/QuickTagHelp; sourceTree = "<group>"; };
 		D1FAAE16185CA05F0063BF6B /* QuickTag.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuickTag.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1FAAE19185CA05F0063BF6B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		D1FAAE1B185CA05F0063BF6B /* AppleScriptObjC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppleScriptObjC.framework; path = System/Library/Frameworks/AppleScriptObjC.framework; sourceTree = SDKROOT; };
@@ -55,7 +55,7 @@
 		D183A51518AEAB0C00E70C10 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				D183A51618AEAF2E00E70C10 /* QuickTagHelp */,
+				D1D43749190D798D00E256EF /* QuickTagHelp */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -190,7 +190,7 @@
 				D1FAAE33185CA05F0063BF6B /* Images.xcassets in Resources */,
 				D1205AD618B2512D00BED6DD /* QuickTag Logo V2 Full Size.png in Resources */,
 				D1FAAE2C185CA05F0063BF6B /* Credits.rtf in Resources */,
-				D183A51718AEAF2E00E70C10 /* QuickTagHelp in Resources */,
+				D1D4374A190D798D00E256EF /* QuickTagHelp in Resources */,
 				D1FAAE31185CA05F0063BF6B /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
