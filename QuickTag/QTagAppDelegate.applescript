@@ -80,6 +80,12 @@ script QTagAppDelegate
     property categoryList : missing value
     property attributeList : missing value
     
+    -- List of all the current playlists
+    property allPlaylistNameList : missing value
+    
+    -- Interface outlet for playlist selection
+    property initialPlaylistComboBox : missing value
+    
     -- Interface outlets for the configurable delimiters
     property genreStartDelimiter : missing value
     property genreEndDelimiter : missing value
@@ -150,11 +156,23 @@ script QTagAppDelegate
         
         -- Register user defaults
         log "Registering user defaults"
-        tell defaults to registerDefaults_({tagFieldSelector:"Comments",tagDestination:"Overwrite existing value", genreStartDelim:"(", genreEndDelim:")", genreDelimiterEnabled:1, ratingStartDelim:"<", ratingEndDelim:">", ratingDelimiterEnabled:1, categoryStartDelim:"{", categoryEndDelim:"}",categoryDelimiterEnabled:1, attributeStartDelim:"[", attributeEndDelim:"]", attributeDelimiterEnabled:1, tagSeparator:",", tagField:tagDefaults, customTagline:"Tagged with QuickTag", genres:genreDefaults, categories:categoryDefaults, attributes:attributeDefaults})
+        tell defaults to registerDefaults_({tagFieldSelector:"Comments",tagDestination:"Overwrite existing value", genreStartDelim:"(", genreEndDelim:")", genreDelimiterEnabled:1, ratingStartDelim:"<", ratingEndDelim:">", ratingDelimiterEnabled:1, categoryStartDelim:"{", categoryEndDelim:"}",categoryDelimiterEnabled:1, attributeStartDelim:"[", attributeEndDelim:"]", attributeDelimiterEnabled:1, tagSeparator:",", tagField:tagDefaults, customTagline:"Tagged with QuickTag", genres:genreDefaults, categories:categoryDefaults, attributes:attributeDefaults, initialPlaylist:""})
+        
+        -- Get the list of playlists, once on startup.  User can refresh the list later from the preferences window.
+        importPlaylists_(me)
         
         -- Apply preferences, grabbing current configured values and refresh the interface
         applyPreferences_(me)
-              
+        
+        -- Select the preferred initial playlist
+        
+        set initList to initialPlaylistComboBox's stringValue as text
+        try
+            tell application id "com.apple.iTunes" to set view of front browser window to (get (first playlist whose name starts with initList))
+        on error
+            log ("WARNING: applicationWillFinishLaunching_() - could not select initial playlist.")
+        end try
+
         -- Start the idle loop, which is the event loop for all application events
         idleLoop_(idleLoopDelay) -- Interval in seconds
 	end applicationWillFinishLaunching_
@@ -214,7 +232,7 @@ script QTagAppDelegate
            log "Activating iTunes"
            tell application "iTunes" to activate
            return true
-        end if
+       end if
        
        if my itunesIsNotAccesible() is true then
            set opt to (display dialog "Please close any utility windows that may be open in iTunes" buttons {"OK"} default button 1 with title "Cannot proceed..." with icon 0 giving up after 30)
@@ -633,6 +651,7 @@ script QTagAppDelegate
                 log ("ERROR: applyPreferences_() attribute - " & errorMessage & ", errorNumber: " & errorNumber)
             end try
         end repeat
+
         
         -- Finally, refresh the interface with the new values
         log "Refreshing user interface with new preferences"
@@ -668,6 +687,28 @@ script QTagAppDelegate
             
         end if
     end importGenres
+
+    (*
+     * Get a list of the  current playlists from iTunes, update the playlist selector combo box
+     *)
+    on importPlaylists_(sender)
+        log "Importing playlists from iTunes"
+        
+        -- Get the current names of playlists
+        try
+            tell application id "com.apple.iTunes"
+                set allPlaylistNameList to the name of every playlist
+            end tell
+            on error
+            log("ERROR: importPlaylists_() - Unable to retrieve all playlist names")
+        end try
+        
+        log "Playlist names are: " & allPlayListNameList
+        
+        -- Set up the pull down of playlists
+        initialPlaylistComboBox's removeAllItems()
+        initialPlaylistComboBox's addItemsWithObjectValues_(allPlaylistNameList)
+    end importPlaylists
 
     (*
      * Trims "trim_chars" from "this_text".  Trim indicator specifies where to trim:

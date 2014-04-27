@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
+        <deployment defaultVersion="1080" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5053"/>
     </dependencies>
     <objects>
@@ -509,8 +510,8 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qZu-O4-qDY">
-                                    <rect key="frame" x="9" y="343" width="45" height="16"/>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qZu-O4-qDY">
+                                    <rect key="frame" x="9" y="342" width="45" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Rating:" id="n63-RO-Xf2">
                                         <font key="font" metaFont="cellTitle"/>
@@ -518,8 +519,8 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <levelIndicator verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zKl-WR-Z37">
-                                    <rect key="frame" x="101" y="343" width="92" height="12"/>
+                                <levelIndicator verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zKl-WR-Z37">
+                                    <rect key="frame" x="101" y="342" width="92" height="12"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="92" id="FUh-Vn-GNs"/>
@@ -529,7 +530,7 @@
                                 <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="08d-NJ-VgE">
                                     <rect key="frame" x="101" y="363" width="465" height="23"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="10" id="yc5-gL-qF1">
+                                    <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="10" id="yc5-gL-qF1">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -729,14 +730,6 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1LQ-pl-RcL">
-                        <rect key="frame" x="461" y="646" width="82" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0pK-uH-bsn">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="MTD-Hm-oUz" secondAttribute="trailing" constant="20" symbolic="YES" id="7X2-3l-Wdt"/>
@@ -803,6 +796,7 @@
                 <outlet property="genreDelimiterEnabled" destination="GxJ-N5-l2h" id="4Sd-P1-KWt"/>
                 <outlet property="genreEndDelimiter" destination="MiB-wd-Qvs" id="PBV-5l-JT1"/>
                 <outlet property="genreStartDelimiter" destination="P1X-it-MlC" id="kP0-hH-wxi"/>
+                <outlet property="initialPlaylistComboBox" destination="NeO-Oa-KGa" id="sHZ-rd-wK2"/>
                 <outlet property="ratingDelimiterEnabled" destination="3wq-Ak-VdY" id="kCh-g3-8iD"/>
                 <outlet property="ratingEndDelimiter" destination="ASH-nP-dHj" id="Urn-3y-iqh"/>
                 <outlet property="ratingSelector" destination="zKl-WR-Z37" id="4N1-aZ-yca"/>
@@ -1648,6 +1642,44 @@
                                 <view key="view" id="NhX-nw-aS4">
                                     <rect key="frame" x="10" y="33" width="423" height="520"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NeO-Oa-KGa">
+                                            <rect key="frame" x="190" y="492" width="226" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="10" id="JyT-Bm-BWy">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </comboBoxCell>
+                                            <connections>
+                                                <binding destination="vxo-Jf-P1h" name="value" keyPath="values.initialPlaylist" id="lzw-pi-3iO">
+                                                    <dictionary key="options">
+                                                        <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
+                                        </comboBox>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cMB-SA-A8g">
+                                            <rect key="frame" x="17" y="498" width="162" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Start with iTunes playlist:" id="fat-FQ-DCb">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1DT-Nd-BVl">
+                                            <rect key="frame" x="330" y="457" width="87" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Refresh" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ouG-Ri-In4">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="importPlaylists:" target="494" id="a4l-Ky-bZY"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
                                 </view>
                             </tabViewItem>
                         </tabViewItems>
@@ -1720,18 +1752,9 @@
             </connections>
         </arrayController>
         <userDefaultsController representsSharedInstance="YES" id="vxo-Jf-P1h"/>
-        <button horizontalHuggingPriority="750" verticalHuggingPriority="750" id="BIe-qb-Ax6">
-            <rect key="frame" x="0.0" y="0.0" width="39" height="38"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-            <buttonCell key="cell" type="round" bezelStyle="circular" image="NSCaution" imagePosition="only" alignment="left" borderStyle="border" imageScaling="proportionallyDown" id="qPq-1K-Uz9">
-                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                <font key="font" metaFont="label"/>
-            </buttonCell>
-        </button>
     </objects>
     <resources>
         <image name="NSAddTemplate" width="8" height="8"/>
-        <image name="NSCaution" width="32" height="32"/>
         <image name="NSRemoveTemplate" width="8" height="8"/>
         <image name="QuickTag Logo V2 Full Size" width="245.75999450683594" height="245.75999450683594"/>
     </resources>
