@@ -1,4 +1,4 @@
-![QuickTag](QuickTag/Images.xcassets/AppIcon.appiconset /QuickTag_128x128.png)
+![QuickTag](QuickTag/Images.xcassets/AppIcon.appiconset/QuickTag_128x128.png)
 
 ### About
 QuickTag for iTunes was developed to solve a problem frequently encoutered by DJ's trying to organize large music collections.  Although originally intended for DJ's, QuickTag can be used for anyone with a large music collection wanting to better sort their music.
